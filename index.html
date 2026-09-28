@@ -1,0 +1,2154 @@
+  <!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESL Teacher Dashboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link id="google-fonts-link" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --theme-primary: #4f46e5;
+            --theme-primary-dark: #4338ca;
+            --theme-primary-soft: #eef2ff;
+            --theme-primary-soft-strong: #c7d2fe;
+            --theme-primary-text: #4338ca;
+        }
+
+        body.theme-indigo { --theme-primary: #4f46e5; --theme-primary-dark: #4338ca; --theme-primary-soft: #eef2ff; --theme-primary-soft-strong: #c7d2fe; --theme-primary-text: #4338ca; }
+        body.theme-emerald { --theme-primary: #10b981; --theme-primary-dark: #059669; --theme-primary-soft: #d1fae5; --theme-primary-soft-strong: #a7f3d0; --theme-primary-text: #047857; }
+        body.theme-violet { --theme-primary: #8b5cf6; --theme-primary-dark: #7c3aed; --theme-primary-soft: #f3e8ff; --theme-primary-soft-strong: #ddd6fe; --theme-primary-text: #6d28d9; }
+        body.theme-amber { --theme-primary: #f59e0b; --theme-primary-dark: #d97706; --theme-primary-soft: #fef3c7; --theme-primary-soft-strong: #fde68a; --theme-primary-text: #b45309; }
+        body.theme-rose { --theme-primary: #f43f5e; --theme-primary-dark: #e11d48; --theme-primary-soft: #ffe4e6; --theme-primary-soft-strong: #fecdd3; --theme-primary-text: #be123c; }
+        body.theme-cyan { --theme-primary: #06b6d4; --theme-primary-dark: #0891b2; --theme-primary-soft: #cffafe; --theme-primary-soft-strong: #a5f3fc; --theme-primary-text: #0e7490; }
+        body.theme-blue { --theme-primary: #3b82f6; --theme-primary-dark: #2563eb; --theme-primary-soft: #dbeafe; --theme-primary-soft-strong: #bfdbfe; --theme-primary-text: #1d4ed8; }
+        body.theme-teal { --theme-primary: #14b8a6; --theme-primary-dark: #0f766e; --theme-primary-soft: #ccfbf1; --theme-primary-soft-strong: #99f6e4; --theme-primary-text: #115e59; }
+        body.theme-fuchsia { --theme-primary: #d946ef; --theme-primary-dark: #c026d3; --theme-primary-soft: #fae8ff; --theme-primary-soft-strong: #f5d0fe; --theme-primary-text: #a21caf; }
+        body.theme-sky { --theme-primary: #0ea5e9; --theme-primary-dark: #0284c7; --theme-primary-soft: #e0f2fe; --theme-primary-soft-strong: #bae6fd; --theme-primary-text: #0369a1; }
+        body.theme-lime { --theme-primary: #84cc16; --theme-primary-dark: #65a30d; --theme-primary-soft: #ecfccb; --theme-primary-soft-strong: #d9f99d; --theme-primary-text: #4d7c0f; }
+        body.theme-orange { --theme-primary: #f97316; --theme-primary-dark: #ea580c; --theme-primary-soft: #ffedd5; --theme-primary-soft-strong: #fed7aa; --theme-primary-text: #c2410c; }
+        body.theme-purple { --theme-primary: #a855f7; --theme-primary-dark: #9333ea; --theme-primary-soft: #f3e8ff; --theme-primary-soft-strong: #e9d5ff; --theme-primary-text: #7e22ce; }
+        body.theme-slate { --theme-primary: #475569; --theme-primary-dark: #334155; --theme-primary-soft: #f1f5f9; --theme-primary-soft-strong: #cbd5e1; --theme-primary-text: #1e293b; }
+        body.theme-zinc { --theme-primary: #71717a; --theme-primary-dark: #52525b; --theme-primary-soft: #f4f4f5; --theme-primary-soft-strong: #e4e4e7; --theme-primary-text: #3f3f46; }
+        body.theme-red { --theme-primary: #ef4444; --theme-primary-dark: #dc2626; --theme-primary-soft: #fee2e2; --theme-primary-soft-strong: #fecaca; --theme-primary-text: #b91c1c; }
+        body.theme-green { --theme-primary: #22c55e; --theme-primary-dark: #16a34a; --theme-primary-soft: #dcfce7; --theme-primary-soft-strong: #bbf7d0; --theme-primary-text: #15803d; }
+        body.theme-yellow { --theme-primary: #eab308; --theme-primary-dark: #ca8a04; --theme-primary-soft: #fef9c3; --theme-primary-soft-strong: #fde68a; --theme-primary-text: #a16207; }
+        body.theme-stone { --theme-primary: #a16207; --theme-primary-dark: #854d0e; --theme-primary-soft: #fef3c7; --theme-primary-soft-strong: #fde68a; --theme-primary-text: #713f12; }
+        body.theme-neutral { --theme-primary: #6b7280; --theme-primary-dark: #4b5563; --theme-primary-soft: #f3f4f6; --theme-primary-soft-strong: #e5e7eb; --theme-primary-text: #374151; }
+
+        /* Custom scrollbar and sleek transition defaults */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(156, 163, 175, 0.5); border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(107, 114, 128, 0.8); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .nav-btn {
+            background-color: transparent;
+            color: #475569;
+        }
+
+        .nav-btn i {
+            color: inherit;
+        }
+
+        .nav-btn:hover:not(.active) {
+            background-color: #f1f5f9;
+            color: #0f172a;
+        }
+
+        .nav-btn.active {
+            background-color: var(--theme-primary-soft);
+            color: var(--theme-primary-text);
+        }
+
+        .nav-btn.active i {
+            color: var(--theme-primary-text);
+        }
+
+        .nav-btn.active:hover {
+            background-color: var(--theme-primary-soft);
+            color: var(--theme-primary-text);
+        }
+    </style>
+</head>
+<body class="h-full bg-slate-50 text-slate-800 font-sans antialiased transition-colors duration-300" id="body-root">
+
+    <div id="app" class="flex h-screen overflow-hidden">
+        
+        <!-- SIDEBAR NAVIGATION -->
+        <aside id="sidebar" class="w-64 bg-white border-r border-slate-200 flex flex-col z-20 transition-all duration-300 shadow-sm">
+            <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div id="sidebar-avatar-wrap" class="w-16 h-16 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-2xl overflow-hidden shadow-inner">
+                        <img id="sidebar-avatar-img" src="" alt="Profile" class="w-full h-full object-cover hidden">
+                        <span id="sidebar-avatar-text">ET</span>
+                    </div>
+                    <div>
+                        <h1 id="brand-title" class="font-bold text-slate-900 text-sm tracking-tight truncate max-w-[130px]">ESL Dashboard</h1>
+                        <p class="text-xs text-slate-500 font-medium">Professional Teacher</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-1">
+                <button onclick="switchTab('dashboard')" class="nav-btn active w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600" data-tab="dashboard">
+                    <i class="fa-solid fa-chart-pie w-5 text-center"></i>
+                    <span>Dashboard</span>
+                </button>
+                <button onclick="switchTab('students')" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600" data-tab="students">
+                    <i class="fa-solid fa-user-graduate w-5 text-center"></i>
+                    <span>Students</span>
+                </button>
+                <button onclick="switchTab('schedule')" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600" data-tab="schedule">
+                    <i class="fa-solid fa-calendar-days w-5 text-center"></i>
+                    <span>Weekly Schedule</span>
+                </button>
+                <button onclick="switchTab('payments')" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600" data-tab="payments">
+                    <i class="fa-solid fa-wallet w-5 text-center"></i>
+                    <span>Payments</span>
+                </button>
+                <button onclick="switchTab('records')" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600" data-tab="records">
+                    <i class="fa-solid fa-clipboard-list w-5 text-center"></i>
+                    <span>Class Records</span>
+                </button>
+                <button onclick="switchTab('reports')" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600" data-tab="reports">
+                    <i class="fa-solid fa-chart-line w-5 text-center"></i>
+                    <span>Reports & Analysis</span>
+                </button>
+                <button onclick="switchTab('settings')" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600" data-tab="settings">
+                    <i class="fa-solid fa-gear w-5 text-center"></i>
+                    <span>Settings</span>
+                </button>
+            </nav>
+
+            <!-- Bottom info / Current Week badge -->
+            <div class="p-4 border-t border-slate-100 bg-slate-50/50">
+                <div class="text-xs text-slate-500 mb-1 font-semibold uppercase tracking-wider">Active View Week</div>
+                <div id="sidebar-current-week-label" class="text-xs font-bold text-slate-700 bg-white border border-slate-200 px-2.5 py-1.5 rounded-lg shadow-xs text-center">
+                    Sep 21 - Sep 27, 2026
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN VIEWPORT CONTAINER -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+            
+            <!-- TOP BAR -->
+            <header class="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between z-10 shadow-xs">
+                <div class="flex items-center space-x-4">
+                    <h2 id="topbar-title" class="text-lg font-bold text-slate-800">Dashboard Overview</h2>
+                    <span id="live-clock-badge" class="hidden sm:inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100">
+                        <i class="fa-regular fa-clock mr-1.5"></i> <span id="header-clock">--:--:--</span>
+                    </span>
+                </div>
+
+                <div id="topbar-global-actions" class="flex items-center space-x-4" style="display: none;">
+                    <!-- Quick global Week Selector for Dashboard & Schedule -->
+                    <div class="flex items-center space-x-2 bg-slate-100 p-1 rounded-xl border border-slate-200">
+                        <button onclick="changeGlobalWeek(-1)" class="w-7 h-7 flex items-center justify-center rounded-lg bg-white text-slate-600 hover:bg-slate-50 shadow-xs transition" title="Previous Week">
+                            <i class="fa-solid fa-chevron-left text-xs"></i>
+                        </button>
+                        <span id="global-week-display" class="text-xs font-bold text-slate-700 px-2">Sep 21 - Sep 27, 2026</span>
+                        <button onclick="changeGlobalWeek(1)" class="w-7 h-7 flex items-center justify-center rounded-lg bg-white text-slate-600 hover:bg-slate-50 shadow-xs transition" title="Next Week">
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </button>
+                    </div>
+                    
+                    <button onclick="openAddClassModal()" class="hidden md:inline-flex items-center space-x-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl shadow-sm transition">
+                        <i class="fa-solid fa-plus text-xs"></i>
+                        <span>Add Class</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- SCROLLABLE CONTENT AREA -->
+            <div class="flex-1 overflow-y-auto p-6 bg-slate-50 relative" id="main-scroll-area">
+                
+                <!-- 1. DASHBOARD TAB -->
+                <div id="tab-dashboard" class="tab-content active space-y-6">
+                    <!-- Greeting & Quote Banner -->
+                    <div class="rounded-[28px] p-6 text-white shadow-md relative overflow-hidden bg-gradient-to-r from-[#5d4ae6] via-[#4f46e5] to-[#6f46d8]">
+                        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.18),_transparent_42%)]"></div>
+                        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-5">
+                            <div class="flex-1">
+                                <h2 id="greeting-heading" class="text-3xl md:text-5xl font-bold tracking-tight leading-tight">Good afternoon, Teacher!</h2>
+                                <p id="dashboard-date-sub" class="text-white/90 text-base md:text-lg mt-3">Today is Monday, September 28, 2026</p>
+                            </div>
+                            <div class="w-full max-w-[420px] rounded-2xl border border-white/30 bg-white/10 backdrop-blur-md p-4 shadow-inner">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-[11px] font-bold uppercase tracking-[0.2em] text-white/75">Inspirational Quote</span>
+                                    <button onclick="editInspirationalQuote()" class="text-sm font-medium text-white/85 hover:text-white underline">Edit</button>
+                                </div>
+                                <p id="inspirational-quote-text" class="text-base md:text-lg italic text-white/90 leading-relaxed">"Education is the passport to the future, for tomorrow belongs to those who prepare for it today."</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KPI Cards Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Total Classes Today -->
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Classes Today</p>
+                                <h3 id="kpi-classes-today" class="text-3xl font-bold text-slate-900 mt-2">0</h3>
+                                <p id="kpi-classes-today-sub" class="text-xs text-emerald-600 font-medium mt-1"><i class="fa-solid fa-arrow-up mr-1"></i>0 completed / 0 upcoming</p>
+                            </div>
+                            <div class="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl shadow-inner">
+                                <i class="fa-solid fa-chalkboard-user"></i>
+                            </div>
+                        </div>
+
+                        <!-- Weekly Payment (Selected Week) -->
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Weekly Revenue (Selected Week)</p>
+                                <h3 id="kpi-weekly-revenue" class="text-3xl font-bold text-red-700 mt-2">₱0.00</h3>
+                                <p class="text-xs text-slate-500 font-medium mt-1">Based on marked attendance</p>
+                            </div>
+                            <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shadow-inner">
+                                <i class="fa-solid fa-peso-sign"></i>
+                            </div>
+                        </div>
+
+                        <!-- Classes This Week -->
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Classes This Week</p>
+                                <h3 id="kpi-classes-week" class="text-3xl font-bold text-slate-900 mt-2">0</h3>
+                                <p class="text-xs text-slate-500 font-medium mt-1">Total scheduled in active week</p>
+                            </div>
+                            <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl shadow-inner">
+                                <i class="fa-solid fa-calendar-week"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard Quick Tables: Today's Schedule & Student Milestones -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Today's Schedule Preview -->
+                        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-bold text-slate-800 text-base">Today's Schedule</h3>
+                                <button onclick="switchTab('schedule')" class="text-xs text-indigo-600 font-semibold hover:underline">View Weekly Grid</button>
+                            </div>
+                            <div id="dashboard-today-classes-list" class="flex-1 overflow-y-auto space-y-3 max-h-[300px]">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Active Students & Milestone Alerts -->
+                        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-bold text-slate-800 text-base">Student Milestone Alerts</h3>
+                                <span class="text-xs bg-violet-50 text-violet-700 px-2.5 py-1 rounded-full font-semibold">Targets: 15, 20, 30</span>
+                            </div>
+                            <div id="dashboard-milestone-list" class="flex-1 overflow-y-auto space-y-3 max-h-[300px]">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. STUDENTS TAB -->
+                <div id="tab-students" class="tab-content space-y-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-lg">Student Management</h3>
+                            <p class="text-xs text-slate-500">Manage rates, timezones, student notes, and milestone tracking.</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                    <i class="fa-solid fa-search text-xs"></i>
+                                </span>
+                                <input type="text" id="student-search-input" oninput="renderStudentsList()" placeholder="Search students..." class="pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full sm:w-64">
+                            </div>
+                            <button onclick="openStudentModal()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl shadow-sm transition flex items-center space-x-2 shrink-0">
+                                <i class="fa-solid fa-user-plus"></i>
+                                <span>Add Student</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Students Table -->
+                    <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50/80 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                        <th class="py-3.5 px-6">Student Name</th>
+                                        <th class="py-3.5 px-4">Company / Info</th>
+                                        <th class="py-3.5 px-4">Country & Timezone</th>
+                                        <th class="py-3.5 px-4">Rates (25m / 50m)</th>
+                                        <th class="py-3.5 px-4">Classes Completed</th>
+                                        <th class="py-3.5 px-4">Status</th>
+                                        <th class="py-3.5 px-6 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="students-table-body" class="divide-y divide-slate-100 text-sm">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. WEEKLY SCHEDULE TAB -->
+                <div id="tab-schedule" class="tab-content space-y-6">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                        <div>
+                            <div class="flex items-center space-x-3">
+                                <h3 id="schedule-tab-title" class="font-bold text-slate-800 text-lg">Weekly Schedule</h3>
+                                <span id="schedule-active-week-badge" class="text-xs bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full font-bold border border-indigo-100">Sep 21 - Sep 27, 2026</span>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-0.5">24-hour grid from 8:00 AM to 4:00 AM next day (30-min intervals).</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="flex items-center space-x-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
+                                <button onclick="changeGlobalWeek(-1)" class="px-3 py-1.5 text-xs font-semibold bg-white rounded-lg shadow-xs hover:bg-slate-50 transition">Previous</button>
+                                <button onclick="resetToCurrentWeek()" class="px-3 py-1.5 text-xs font-semibold text-indigo-600 hover:underline">Current Week</button>
+                                <button onclick="changeGlobalWeek(1)" class="px-3 py-1.5 text-xs font-semibold bg-white rounded-lg shadow-xs hover:bg-slate-50 transition">Next</button>
+                            </div>
+                            <button onclick="openAddClassModal()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl shadow-sm transition flex items-center space-x-2">
+                                <i class="fa-solid fa-plus text-xs"></i>
+                                <span>Add Slot</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- The 24-hour 7-day Schedule Grid Container -->
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden flex flex-col">
+                        <div id="schedule-grid-wrapper" class="overflow-x-auto overflow-y-auto max-h-[700px] relative">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. PAYMENTS TAB -->
+                <div id="tab-payments" class="tab-content space-y-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-lg">Payments & Earnings Ledger</h3>
+                            <p class="text-xs text-slate-500">Grouped by student and weekly intervals with automatic PHP conversion.</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <span id="payments-total-sum-badge" class="px-4 py-2 bg-red-50 text-red-700 font-bold text-sm rounded-xl border border-red-200 shadow-xs">
+                                Total: ₱0.00
+                            </span>
+                        </div>
+                    </div>
+
+                    <div id="payments-groups-container" class="space-y-6">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- 5. CLASS RECORDS TAB -->
+                <div id="tab-records" class="tab-content space-y-6">
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-lg">Class Records & History</h3>
+                            <p class="text-xs text-slate-500">Month-to-month historical tracking of all scheduled classes.</p>
+                        </div>
+                        <!-- Filters -->
+                        <div class="flex flex-wrap items-center gap-3">
+                            <input type="text" id="record-search" oninput="renderClassRecords()" placeholder="Search name/company..." class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <select id="record-status-select" onchange="renderClassRecords()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <option value="all">All Status</option>
+                                <option value="Present">Present</option>
+                                <option value="Absent">Absent</option>
+                                <option value="Cancelled">Cancelled</option>
+                                <option value="Scheduled">Scheduled</option>
+                            </select>
+                            <select id="record-month-select" onchange="renderClassRecords()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <!-- Populated dynamically -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50/80 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                        <th class="py-3.5 px-6">Date & Time</th>
+                                        <th class="py-3.5 px-4">Student</th>
+                                        <th class="py-3.5 px-4">Company</th>
+                                        <th class="py-3.5 px-4">Type</th>
+                                        <th class="py-3.5 px-4">Duration</th>
+                                        <th class="py-3.5 px-4">Attendance</th>
+                                        <th class="py-3.5 px-6 text-right">Computed PHP</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="records-table-body" class="divide-y divide-slate-100 text-sm">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. REPORTS & ANALYSIS TAB -->
+                <div id="tab-reports" class="tab-content space-y-6">
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between gap-3 flex-wrap">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-lg">Reports & Advanced Analysis</h3>
+                            <p class="text-xs text-slate-500">Monthly earnings, attendance statistics, and company breakdowns.</p>
+                        </div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <select id="report-status-select" onchange="renderReports()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <option value="all">All Attendance</option>
+                                <option value="Present">Present</option>
+                                <option value="Absent">Absent</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                            <select id="report-month-select" onchange="renderReports()" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <!-- Populated dynamically -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Analytics Grid Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Monthly Revenue</p>
+                            <h3 id="report-monthly-revenue" class="text-2xl font-bold text-red-700 mt-2">₱0.00</h3>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Attendance Rate</p>
+                            <h3 id="report-attendance-rate" class="text-2xl font-bold text-slate-900 mt-2">0%</h3>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Cancelled Classes</p>
+                            <h3 id="report-cancelled-count" class="text-2xl font-bold text-slate-900 mt-2">0</h3>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Classes Conducted</p>
+                            <h3 id="report-total-conducted" class="text-2xl font-bold text-slate-900 mt-2">0</h3>
+                        </div>
+                    </div>
+
+                    <!-- Company Breakdown -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+                        <h4 class="font-bold text-slate-800 text-base mb-4">Revenue Breakdown by Company / Platform</h4>
+                        <div id="report-company-breakdown" class="space-y-3">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. SETTINGS TAB -->
+                <div id="tab-settings" class="tab-content space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-6">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-lg">System Preferences & Settings</h3>
+                            <p class="text-xs text-slate-500">Customize appearance, dashboard titles, profile picture, and exchange rates.</p>
+                        </div>
+
+                        <hr class="border-slate-100">
+
+                        <!-- General & Title Settings -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Dashboard Brand Title</label>
+                                <input type="text" id="settings-brand-title-input" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="ESL Teacher Dashboard">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Profile Picture</label>
+                                <div class="space-y-2">
+                                    <input type="file" id="settings-avatar-upload" accept="image/*" class="block w-full text-sm text-slate-600 file:mr-3 file:py-3 file:px-4 file:rounded-xl file:border-0 file:bg-indigo-100 file:text-indigo-700 file:font-semibold file:cursor-pointer">
+                                    <input type="text" id="settings-avatar-url-input" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Or paste image URL here">
+                                    <button type="button" onclick="removeAvatar()" class="inline-flex items-center gap-2 px-3 py-2 text-xs font-semibold text-rose-700 hover:bg-rose-50 rounded-lg transition">
+                                        <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                                        <span>Remove photo</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 20 Themes & 20 Fonts -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Select Color Theme (20 Options)</label>
+                                <select id="settings-theme-select" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <option value="indigo">Indigo Professional (Default)</option>
+                                    <option value="emerald">Emerald Fresh</option>
+                                    <option value="violet">Violet Royal</option>
+                                    <option value="amber">Amber Warm</option>
+                                    <option value="rose">Rose Elegance</option>
+                                    <option value="cyan">Cyan Modern</option>
+                                    <option value="blue">Classic Blue</option>
+                                    <option value="teal">Teal Calm</option>
+                                    <option value="fuchsia">Fuchsia Vibrant</option>
+                                    <option value="sky">Sky Breeze</option>
+                                    <option value="lime">Lime Energy</option>
+                                    <option value="orange">Orange Sunset</option>
+                                    <option value="purple">Purple Mystic</option>
+                                    <option value="slate">Monochrome Slate</option>
+                                    <option value="zinc">Zinc Minimal</option>
+                                    <option value="red">Ruby Red</option>
+                                    <option value="green">Forest Green</option>
+                                    <option value="yellow">Golden Yellow</option>
+                                    <option value="stone">Warm Stone</option>
+                                    <option value="neutral">Neutral Clean</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Select Font Style (20 Options)</label>
+                                <select id="settings-font-select" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <option value="Inter">Inter</option>
+                                    <option value="Roboto">Roboto</option>
+                                    <option value="Open Sans">Open Sans</option>
+                                    <option value="Lato">Lato</option>
+                                    <option value="Poppins">Poppins</option>
+                                    <option value="Montserrat">Montserrat</option>
+                                    <option value="Nunito">Nunito</option>
+                                    <option value="Raleway">Raleway</option>
+                                    <option value="Ubuntu">Ubuntu</option>
+                                    <option value="Playfair Display">Playfair Display</option>
+                                    <option value="Merriweather">Merriweather</option>
+                                    <option value="Lora">Lora</option>
+                                    <option value="PT Serif">PT Serif</option>
+                                    <option value="Source Sans 3">Source Sans 3</option>
+                                    <option value="Work Sans">Work Sans</option>
+                                    <option value="Mulish">Mulish</option>
+                                    <option value="Quicksand">Quicksand</option>
+                                    <option value="Rubik">Rubik</option>
+                                    <option value="Fira Sans">Fira Sans</option>
+                                    <option value="Karla">Karla</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <hr class="border-slate-100">
+
+                        <!-- Exchange Rate Manager -->
+                        <div class="rounded-2xl border border-slate-200 bg-slate-50/40 p-5">
+                            <div class="flex items-center justify-between gap-4 flex-wrap mb-5">
+                                <div>
+                                    <h4 class="font-bold text-slate-800 text-lg">PHP exchange rates</h4>
+                                    <p class="text-xs text-slate-500">Rates recalculate pending records only. Paid records retain their locked snapshot.</p>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 lg:grid-cols-[1.3fr_1.1fr_auto] gap-4 items-end">
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-2">Currency</label>
+                                    <select id="exchange-rate-currency-select" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                        <!-- Populated dynamically -->
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-2">1 unit in PHP</label>
+                                    <input id="exchange-rate-value-input" type="number" step="0.0001" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="1">
+                                </div>
+                                <button onclick="saveExchangeRate()" class="px-5 py-3 bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm rounded-xl shadow-sm transition">
+                                    Save rate
+                                </button>
+                            </div>
+
+                            <div id="exchange-rates-container" class="mt-6 space-y-2 rounded-2xl border border-slate-200 bg-white overflow-hidden">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end pt-4">
+                            <button onclick="saveSettings()" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-sm transition">
+                                Save Settings
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- MODALS -->
+
+    <!-- Student Add/Edit Modal -->
+    <div id="student-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full overflow-hidden border border-slate-200">
+            <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+                <h3 id="student-modal-title" class="font-bold text-slate-800 text-base">Add New Student</h3>
+                <button onclick="closeStudentModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
+                <input type="hidden" id="student-edit-id">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Student Name</label>
+                    <input type="text" id="modal-student-name" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="e.g., Tanaka Ken">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Company / Independent</label>
+                        <input type="text" id="modal-student-company" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="e.g., Native Camp / Independent">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Country</label>
+                        <select id="modal-student-country" onchange="onStudentCountryChange()" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Timezone (Auto-aligned)</label>
+                        <input type="text" id="modal-student-timezone" class="w-full px-3.5 py-2 bg-slate-100 border border-slate-200 rounded-xl text-sm font-medium text-slate-600" readonly>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Currency</label>
+                        <select id="modal-student-currency" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="PHP">PHP (₱)</option>
+                            <option value="USD">USD ($)</option>
+                            <option value="JPY">JPY (¥)</option>
+                            <option value="KRW">KRW (₩)</option>
+                            <option value="CNY">CNY (¥)</option>
+                            <option value="EUR">EUR (€)</option>
+                            <option value="GBP">GBP (£)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">25-min Rate</label>
+                        <input type="number" step="0.01" id="modal-student-rate25" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500" value="100">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">50-min Rate</label>
+                        <input type="number" step="0.01" id="modal-student-rate50" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500" value="200">
+                    </div>
+                </div>
+                <fieldset>
+                    <legend class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Present class milestone alerts</legend>
+                    <div class="flex flex-wrap gap-4 text-sm text-slate-700">
+                        <label class="flex items-center gap-2"><input type="checkbox" id="student-milestone-15" class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"> 15 classes</label>
+                        <label class="flex items-center gap-2"><input type="checkbox" id="student-milestone-20" class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"> 20 classes</label>
+                        <label class="flex items-center gap-2"><input type="checkbox" id="student-milestone-30" class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"> 30 classes</label>
+                    </div>
+                </fieldset>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Starting Date</label>
+                        <input type="date" id="modal-student-startdate" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Status</label>
+                        <select id="modal-student-status" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Student Notes</label>
+                    <textarea id="modal-student-notes" rows="3" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Add learning goals, level, preferences..."></textarea>
+                </div>
+            </div>
+            <div class="p-5 border-t border-slate-100 flex justify-end space-x-3 bg-slate-50/50">
+                <button onclick="closeStudentModal()" class="px-4 py-2 bg-white border border-slate-200 text-slate-700 font-semibold text-xs rounded-xl hover:bg-slate-50">Cancel</button>
+                <button onclick="saveStudentModal()" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs rounded-xl shadow-sm">Save Student</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Class Modal (Schedule) -->
+    <div id="class-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full overflow-hidden border border-slate-200">
+            <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+                <h3 id="class-modal-title" class="font-bold text-slate-800 text-base">Schedule New Class Slot</h3>
+                <button onclick="closeClassModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <input type="hidden" id="class-edit-id">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Student</label>
+                    <select id="modal-class-student" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <!-- Populated dynamically -->
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Date</label>
+                        <input type="date" id="modal-class-date" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Time (Start)</label>
+                        <select id="modal-class-time" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <!-- Populated with 30 min intervals from 08:00 AM to 03:30 AM -->
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Class Type</label>
+                        <select id="modal-class-type" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="Regular">Regular</option>
+                            <option value="Free Class">Free Class</option>
+                            <option value="Trial Class">Trial Class</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Duration (Mins)</label>
+                        <select id="modal-class-duration" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="25">25 Mins</option>
+                            <option value="50">50 Mins</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="p-5 border-t border-slate-100 flex justify-end space-x-3 bg-slate-50/50">
+                <button onclick="closeClassModal()" class="px-4 py-2 bg-white border border-slate-200 text-slate-700 font-semibold text-xs rounded-xl hover:bg-slate-50">Cancel</button>
+                <button onclick="saveClassModal()" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs rounded-xl shadow-sm">Save Slot</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Class Detail Popup / Action Modal -->
+    <div id="class-action-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full overflow-hidden border border-slate-200">
+            <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+                <h3 id="action-modal-title" class="font-bold text-slate-800 text-base">Class Actions</h3>
+                <button onclick="closeClassActionModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <input type="hidden" id="action-class-id">
+                <div id="action-modal-details" class="text-sm text-slate-600 bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-1">
+                    <!-- Populated dynamically -->
+                </div>
+                <div class="grid grid-cols-2 gap-2 pt-2">
+                    <button onclick="markClassAttendance('Present')" class="px-3 py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-semibold text-xs rounded-xl border border-emerald-200 transition flex items-center justify-center space-x-1.5">
+                        <i class="fa-solid fa-check"></i> <span>Present</span>
+                    </button>
+                    <button onclick="markClassAttendance('Absent')" class="px-3 py-2.5 bg-amber-50 hover:bg-amber-100 text-amber-700 font-semibold text-xs rounded-xl border border-amber-200 transition flex items-center justify-center space-x-1.5">
+                        <i class="fa-solid fa-user-xmark"></i> <span>Absent</span>
+                    </button>
+                    <button onclick="markClassAttendance('Cancelled')" class="px-3 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-semibold text-xs rounded-xl border border-rose-200 transition flex items-center justify-center space-x-1.5">
+                        <i class="fa-solid fa-ban"></i> <span>Cancelled</span>
+                    </button>
+                    <button onclick="editClassFromAction()" class="px-3 py-2.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold text-xs rounded-xl border border-indigo-200 transition flex items-center justify-center space-x-1.5">
+                        <i class="fa-solid fa-pen"></i> <span>Edit Slot</span>
+                    </button>
+                </div>
+                <button onclick="deleteClassFromAction()" class="w-full py-2.5 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 font-semibold text-xs rounded-xl border border-slate-200 transition flex items-center justify-center space-x-1.5">
+                    <i class="fa-solid fa-trash"></i> <span>Delete Class Slot</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quote Edit Modal -->
+    <div id="quote-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full overflow-hidden border border-slate-200">
+            <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+                <h3 class="font-bold text-slate-800 text-base">Edit Inspirational Quote</h3>
+                <button onclick="closeQuoteModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-6">
+                <textarea id="modal-quote-input" rows="4" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+            </div>
+            <div class="p-5 border-t border-slate-100 flex justify-end space-x-3 bg-slate-50/50">
+                <button onclick="closeQuoteModal()" class="px-4 py-2 bg-white border border-slate-200 text-slate-700 font-semibold text-xs rounded-xl">Cancel</button>
+                <button onclick="saveQuoteModal()" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs rounded-xl shadow-sm">Save Quote</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Toast / Message Box (Replaces alert/confirm) -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+    <!-- JAVASCRIPT APP LOGIC -->
+    <script>
+        
+        const COUNTRIES_TIMEZONES = [
+            { country: "Afghanistan", timezone: "GMT+4:30 (AFT)", currency: "AFN" },
+            { country: "Argentina", timezone: "GMT-3 (ART)", currency: "ARS" },
+            { country: "Australia", timezone: "GMT+10 (AEST)", currency: "AUD" },
+            { country: "Austria", timezone: "GMT+1 (CET)", currency: "EUR" },
+            { country: "Bahrain", timezone: "GMT+3 (AST)", currency: "BHD" },
+            { country: "Bangladesh", timezone: "GMT+6 (BST)", currency: "BDT" },
+            { country: "Brazil", timezone: "GMT-3 (BRT)", currency: "BRL" },
+            { country: "Canada", timezone: "GMT-5 (EST)", currency: "CAD" },
+            { country: "China", timezone: "GMT+8 (CST)", currency: "CNY" },
+            { country: "Czech Republic", timezone: "GMT+1 (CET)", currency: "CZK" },
+            { country: "Denmark", timezone: "GMT+1 (CET)", currency: "DKK" },
+            { country: "Egypt", timezone: "GMT+2 (EET)", currency: "EGP" },
+            { country: "France", timezone: "GMT+1 (CET)", currency: "EUR" },
+            { country: "Germany", timezone: "GMT+1 (CET)", currency: "EUR" },
+            { country: "Greece", timezone: "GMT+2 (EET)", currency: "EUR" },
+            { country: "Hong Kong", timezone: "GMT+8 (HKT)", currency: "HKD" },
+            { country: "India", timezone: "GMT+5:30 (IST)", currency: "INR" },
+            { country: "Indonesia", timezone: "GMT+7 (WIB)", currency: "IDR" },
+            { country: "Japan", timezone: "GMT+9 (JST)", currency: "JPY" },
+            { country: "Malaysia", timezone: "GMT+8 (MYT)", currency: "MYR" },
+            { country: "Mexico", timezone: "GMT-6 (CST)", currency: "MXN" },
+            { country: "Netherlands", timezone: "GMT+1 (CET)", currency: "EUR" },
+            { country: "New Zealand", timezone: "GMT+12 (NZST)", currency: "NZD" },
+            { country: "Norway", timezone: "GMT+1 (CET)", currency: "NOK" },
+            { country: "Oman", timezone: "GMT+4 (GST)", currency: "OMR" },
+            { country: "Philippines", timezone: "GMT+8 (PHT)", currency: "PHP" },
+            { country: "Poland", timezone: "GMT+1 (CET)", currency: "PLN" },
+            { country: "Portugal", timezone: "GMT+0 (WET)", currency: "EUR" },
+            { country: "Qatar", timezone: "GMT+3 (AST)", currency: "QAR" },
+            { country: "Romania", timezone: "GMT+2 (EET)", currency: "RON" },
+            { country: "Saudi Arabia", timezone: "GMT+3 (AST)", currency: "SAR" },
+            { country: "Singapore", timezone: "GMT+8 (SGT)", currency: "SGD" },
+            { country: "South Korea", timezone: "GMT+9 (KST)", currency: "KRW" },
+            { country: "Spain", timezone: "GMT+1 (CET)", currency: "EUR" },
+            { country: "Sweden", timezone: "GMT+1 (CET)", currency: "SEK" },
+            { country: "Switzerland", timezone: "GMT+1 (CET)", currency: "CHF" },
+            { country: "Taiwan", timezone: "GMT+8 (CST)", currency: "TWD" },
+            { country: "Thailand", timezone: "GMT+7 (ICT)", currency: "THB" },
+            { country: "Turkey", timezone: "GMT+3 (TRT)", currency: "TRY" },
+            { country: "Ukraine", timezone: "GMT+2 (EET)", currency: "UAH" },
+            { country: "United Arab Emirates", timezone: "GMT+4 (GST)", currency: "AED" },
+            { country: "United Kingdom", timezone: "GMT+0 (GMT)", currency: "GBP" },
+            { country: "United States", timezone: "GMT-5 (EST)", currency: "USD" },
+            { country: "Vietnam", timezone: "GMT+7 (ICT)", currency: "VND" }
+        ];
+
+        const ALL_CURRENCIES = [
+            "AED", "AFN", "ALL", "AMD", "ANG", "AOA", "ARS", "AUD", "AWG", "AZN",
+            "BAM", "BDT", "BGN", "BHD", "BIF", "BMD", "BND", "BOB", "BRL", "BSD",
+            "BTN", "BWP", "BYN", "BZD", "CAD", "CHF", "CLP", "CNY", "COP", "CRC",
+            "CUP", "CVE", "CZK", "DJF", "DKK", "DOP", "DZD", "EGP", "ETB", "EUR",
+            "FJD", "FKP", "GBP", "GEL", "GHS", "GIP", "GMD", "GNF", "GTQ", "GYD",
+            "HKD", "HNL", "HRK", "HTG", "HUF", "IDR", "ILS", "INR", "IQD", "IRR",
+            "ISK", "JMD", "JOD", "JPY", "KES", "KGS", "KHR", "KMF", "KRW", "KWD",
+            "KYD", "KZT", "LAK", "LBP", "LKR", "LRD", "LSL", "LYD", "MAD", "MDL",
+            "MGA", "MKD", "MMK", "MNT", "MOP", "MRU", "MUR", "MVR", "MWK", "MXN",
+            "MYR", "MZN", "NAD", "NGN", "NIO", "NOK", "NPR", "NZD", "OMR", "PAB",
+            "PEN", "PGK", "PHP", "PKR", "PLN", "PYG", "QAR", "RON", "RSD", "RUB",
+            "RWF", "SAR", "SBD", "SCR", "SDG", "SEK", "SGD", "SHP", "SLL", "SOS",
+            "SRD", "SSP", "STN", "SVC", "SZL", "THB", "TJS", "TMT", "TND", "TOP",
+            "TRY", "TTD", "TWD", "TZS", "UAH", "UGX", "USD", "UYU", "UZS", "VND",
+            "VUV", "WST", "XAF", "XCD", "XOF", "XPF", "YER", "ZAR", "ZMW"
+        ];
+
+        const COMMON_EXCHANGE_CURRENCIES = ["PHP", "USD", "EUR", "JPY", "KRW", "CNY", "GBP", "AUD", "CAD", "SGD", "THB", "VND", "INR", "MYR", "HKD"];
+
+        const DEFAULT_EXCHANGE_RATES = {
+            USD: 56.50,
+            JPY: 0.38,
+            KRW: 0.042,
+            CNY: 7.85,
+            EUR: 61.20,
+            GBP: 72.40,
+            PHP: 1.00,
+            TWD: 1.80,
+            VND: 0.0023,
+            AUD: 37.50,
+            CAD: 41.20,
+            AED: 15.38,
+            AFN: 0.66,
+            ARS: 0.58,
+            BDT: 0.52,
+            BHD: 149.60,
+            BRL: 10.25,
+            CHF: 64.80,
+            CZK: 2.44,
+            DKK: 8.20,
+            EGP: 1.16,
+            HKD: 7.23,
+            IDR: 0.0037,
+            INR: 0.68,
+            KWD: 184.90,
+            MXN: 2.90,
+            MYR: 12.75,
+            NOK: 5.20,
+            NZD: 33.80,
+            OMR: 146.10,
+            PLN: 14.40,
+            QAR: 15.50,
+            RON: 12.45,
+            SAR: 15.05,
+            SEK: 5.58,
+            SGD: 41.80,
+            THB: 1.59,
+            TRY: 1.75,
+            UAH: 1.38
+        };
+
+        // Default State
+        let appState = {
+            brandTitle: "ESL Teacher Dashboard",
+            avatarUrl: "",
+            theme: "indigo",
+            font: "Inter",
+            inspirationalQuote: "Education is the passport to the future, for tomorrow belongs to those who prepare for it today.",
+            exchangeRates: { ...DEFAULT_EXCHANGE_RATES },
+            currentSelectedWeekStart: "2026-09-21", // Default week of Sep 21 - Sep 27, 2026
+            students: [
+                { id: "s1", name: "Tanaka Ken", company: "Native Camp", country: "Japan", timezone: "GMT+9 (JST)", currency: "JPY", rate25: 400, rate50: 800, startDate: "2026-01-10", status: "Active", notes: "Loves business English and pronunciation practice.", milestones: { 15: true, 20: false, 30: false } },
+                { id: "s2", name: "Kim Min-ji", company: "Independent", country: "South Korea", timezone: "GMT+9 (KST)", currency: "KRW", rate25: 8500, rate50: 17000, startDate: "2026-02-15", status: "Active", notes: "Preparing for IELTS speaking test.", milestones: { 15: true, 20: true, 30: false } },
+                { id: "s3", name: "Wang Wei", company: "51Talk", country: "China", timezone: "GMT+8 (CST)", currency: "CNY", rate25: 35, rate50: 70, startDate: "2026-03-01", status: "Active", notes: "Junior student, needs patience with vocabulary.", milestones: { 15: false, 20: false, 30: false } }
+            ],
+            classes: [
+                { id: "c1", studentId: "s1", date: "2026-09-21", time: "09:00", type: "Regular", duration: 25, attendance: "Present", paidStatus: "Pending" },
+                { id: "c2", studentId: "s2", date: "2026-09-21", time: "10:00", type: "Regular", duration: 50, attendance: "Present", paidStatus: "Pending" },
+                { id: "c3", studentId: "s3", date: "2026-09-22", time: "14:00", type: "Trial Class", duration: 25, attendance: "Present", paidStatus: "Pending" },
+                { id: "c4", studentId: "s1", date: "2026-09-23", time: "09:00", type: "Regular", duration: 25, attendance: "Absent", paidStatus: "Pending" },
+                { id: "c5", studentId: "s2", date: "2026-09-24", time: "11:00", type: "Free Class", duration: 50, attendance: "Present", paidStatus: "Pending" },
+                { id: "c6", studentId: "s3", date: "2026-09-25", time: "15:00", type: "Regular", duration: 50, attendance: "Present", paidStatus: "Paid" }
+            ],
+            paidWeeks: {} // key: studentId_weekStart -> { classAmounts: { classId: PHP amount } }
+        };
+
+        function ensureAllExchangeRates() {
+            const mergedKeys = Array.from(new Set([...ALL_CURRENCIES, ...Object.keys(appState.exchangeRates || {})]));
+            const normalized = {};
+            mergedKeys.forEach(code => {
+                const currentValue = appState.exchangeRates && appState.exchangeRates[code];
+                normalized[code] = Number.isFinite(currentValue) ? currentValue : (DEFAULT_EXCHANGE_RATES[code] || 1);
+            });
+            appState.exchangeRates = normalized;
+        }
+
+        const syncClientId = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`;
+
+        async function loadState() {
+            try {
+                const response = await fetch('/api/state');
+                if (!response.ok) throw new Error(`State request failed: ${response.status}`);
+                const { state } = await response.json();
+                if (state) {
+                    appState = { ...appState, ...state };
+                } else {
+                    saveState();
+                }
+            } catch (e) {
+                console.error("Error loading shared state:", e);
+            }
+        }
+
+        function saveState() {
+            try {
+                ensureAllExchangeRates();
+                const state = JSON.stringify(appState);
+                fetch('/api/state', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'X-Client-Id': syncClientId },
+                    body: state,
+                    keepalive: new TextEncoder().encode(state).byteLength <= 60 * 1024
+                }).catch(e => {
+                    console.error("Error saving shared state:", e);
+                    showToast("Changes could not be saved. Keep this page open and try again.", "error");
+                });
+            } catch (e) {
+                console.error("Error preparing shared state:", e);
+            }
+        }
+
+        const sharedStateEvents = new EventSource('/api/events');
+        sharedStateEvents.onmessage = function (event) {
+            const update = JSON.parse(event.data);
+            if (update.clientId === syncClientId) return;
+            appState = { ...appState, ...update.state };
+            ensureAllExchangeRates();
+            initThemeAndFont();
+            renderAll();
+        };
+
+        // Initialize on window load
+        window.onload = async function () {
+            await loadState();
+            ensureAllExchangeRates();
+            snapshotLegacyPaidWeeks();
+            initThemeAndFont();
+            populateCountryDropdown();
+            populateTimeDropdown();
+            populateExchangeRateManager();
+            populateMonthDropdowns();
+            
+            // Start Live Clock
+            setInterval(updateLiveClock, 1000);
+            updateLiveClock();
+
+            // Initial render
+            populateCurrencyDropdown();
+            switchTab('dashboard');
+            renderAll();
+        };
+
+        
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `pointer-events-auto px-4 py-3 rounded-xl shadow-lg text-xs font-semibold text-white transition transform translate-y-2 opacity-0 flex items-center space-x-2 ${
+                type === 'success' ? 'bg-emerald-600' : type === 'error' ? 'bg-rose-600' : 'bg-indigo-600'
+            }`;
+            toast.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-circle-check' : type === 'error' ? 'fa-circle-exclamation' : 'fa-circle-info'} text-sm"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.classList.remove('translate-y-2', 'opacity-0'); }, 10);
+            setTimeout(() => {
+                toast.classList.add('translate-y-2', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function parseLocalDate(dateValue) {
+            if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+                const [year, month, day] = dateValue.split('-').map(Number);
+                return new Date(year, month - 1, day);
+            }
+            return new Date(dateValue);
+        }
+
+        function getMonday(d) {
+            d = parseLocalDate(d);
+            let day = d.getDay(),
+                diff = d.getDate() - day + (day == 0 ? -6: 1); // adjust when day is sunday
+            return new Date(d.setDate(diff));
+        }
+
+        function formatDateStr(date) {
+            let y = date.getFullYear();
+            let m = String(date.getMonth() + 1).padStart(2, '0');
+            let d = String(date.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        function getWeekDays(mondayStr) {
+            let start = parseLocalDate(mondayStr);
+            let days = [];
+            for (let i = 0; i < 7; i++) {
+                let curr = new Date(start);
+                curr.setDate(start.getDate() + i);
+                days.push({
+                    dateStr: formatDateStr(curr),
+                    dayName: curr.toLocaleDateString('en-US', { weekday: 'short' }),
+                    displayDate: curr.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+                });
+            }
+            return days;
+        }
+
+        function getWeekLabel(mondayStr) {
+            let start = parseLocalDate(mondayStr);
+            let end = new Date(start);
+            end.setDate(start.getDate() + 6);
+            let opt1 = { month: 'short', day: 'numeric', year: 'numeric' };
+            let opt2 = { month: 'short', day: 'numeric' };
+            return `${start.toLocaleDateString('en-US', opt2)} - ${end.toLocaleDateString('en-US', opt1)}`;
+        }
+
+        function changeGlobalWeek(direction) {
+            let d = parseLocalDate(appState.currentSelectedWeekStart);
+            d.setDate(d.getDate() + (direction * 7));
+            appState.currentSelectedWeekStart = formatDateStr(d);
+            saveState();
+            renderAll();
+        }
+
+        function resetToCurrentWeek() {
+            let todayMon = formatDateStr(getMonday(new Date()));
+            appState.currentSelectedWeekStart = todayMon;
+            saveState();
+            renderAll();
+        }
+
+        // Compute PHP amount for a class
+        function computeCurrentClassPHP(cls) {
+            let student = appState.students.find(s => s.id === cls.studentId);
+            if (!student) return 0;
+            if (cls.type === 'Free Class' || cls.type === 'Trial Class' || cls.attendance === 'Cancelled') {
+                return 0;
+            }
+            let rate = cls.duration === 50 ? student.rate50 : student.rate25;
+            let currency = student.currency || 'PHP';
+            let exchangeRate = appState.exchangeRates[currency] || 1.0;
+            return rate * exchangeRate;
+        }
+
+        function getClassPaymentKey(cls) {
+            return `${cls.studentId}_${formatDateStr(getMonday(cls.date))}`;
+        }
+
+        function snapshotLegacyPaidWeeks() {
+            Object.keys(appState.paidWeeks || {}).forEach(key => {
+                if (appState.paidWeeks[key] !== true) return;
+                const classAmounts = {};
+                appState.classes.forEach(cls => {
+                    if (getClassPaymentKey(cls) === key && (cls.attendance === 'Present' || cls.attendance === 'Absent')) {
+                        classAmounts[cls.id] = computeCurrentClassPHP(cls);
+                    }
+                });
+                appState.paidWeeks[key] = { classAmounts };
+            });
+            saveState();
+        }
+
+        function getLockedClassPHP(cls) {
+            const payment = appState.paidWeeks[getClassPaymentKey(cls)];
+            if (payment === true) return computeCurrentClassPHP(cls);
+            if (!payment || typeof payment !== 'object' || !payment.classAmounts) return null;
+            const amount = payment.classAmounts[cls.id];
+            return Number.isFinite(amount) ? amount : null;
+        }
+
+        function isClassPaid(cls) {
+            const payment = appState.paidWeeks[getClassPaymentKey(cls)];
+            return payment === true || getLockedClassPHP(cls) !== null;
+        }
+
+        function computeClassPHP(cls) {
+            const lockedAmount = getLockedClassPHP(cls);
+            return lockedAmount === null ? computeCurrentClassPHP(cls) : lockedAmount;
+        }
+
+        function updateLiveClock() {
+            let now = new Date();
+            let timeStr = now.toLocaleTimeString();
+            let dateStr = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            
+            let clockEl = document.getElementById('header-clock');
+            if (clockEl) clockEl.innerText = timeStr;
+
+            let subEl = document.getElementById('dashboard-date-sub');
+            if (subEl) subEl.innerText = `Today is ${dateStr}`;
+
+            let greetingEl = document.getElementById('greeting-heading');
+            if (greetingEl) {
+                let hour = now.getHours();
+                let greet = "Good morning";
+                if (hour >= 12 && hour < 17) greet = "Good afternoon";
+                else if (hour >= 17) greet = "Good evening";
+                greetingEl.innerText = `${greet}, Teacher!`;
+            }
+        }
+
+        function handleAvatarUpload(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const result = e.target && e.target.result;
+                if (!result) return;
+                document.getElementById('settings-avatar-url-input').value = result;
+                appState.avatarUrl = result;
+                initThemeAndFont();
+                saveState();
+                showToast('Profile photo updated successfully!');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeAvatar() {
+            appState.avatarUrl = "";
+            document.getElementById('settings-avatar-upload').value = "";
+            document.getElementById('settings-avatar-url-input').value = "";
+            initThemeAndFont();
+            saveState();
+            showToast('Profile photo removed.');
+        }
+
+        function applyThemeStyles() {
+            const palette = {
+                indigo: { primary: '#4f46e5', primaryDark: '#4338ca', soft: '#eef2ff', softStrong: '#c7d2fe', accentText: '#4338ca' },
+                emerald: { primary: '#10b981', primaryDark: '#059669', soft: '#d1fae5', softStrong: '#a7f3d0', accentText: '#047857' },
+                violet: { primary: '#8b5cf6', primaryDark: '#7c3aed', soft: '#f3e8ff', softStrong: '#ddd6fe', accentText: '#6d28d9' },
+                amber: { primary: '#f59e0b', primaryDark: '#d97706', soft: '#fef3c7', softStrong: '#fde68a', accentText: '#b45309' },
+                rose: { primary: '#f43f5e', primaryDark: '#e11d48', soft: '#ffe4e6', softStrong: '#fecdd3', accentText: '#be123c' },
+                cyan: { primary: '#06b6d4', primaryDark: '#0891b2', soft: '#cffafe', softStrong: '#a5f3fc', accentText: '#0e7490' },
+                blue: { primary: '#3b82f6', primaryDark: '#2563eb', soft: '#dbeafe', softStrong: '#bfdbfe', accentText: '#1d4ed8' },
+                teal: { primary: '#14b8a6', primaryDark: '#0f766e', soft: '#ccfbf1', softStrong: '#99f6e4', accentText: '#115e59' },
+                fuchsia: { primary: '#d946ef', primaryDark: '#c026d3', soft: '#fae8ff', softStrong: '#f5d0fe', accentText: '#a21caf' },
+                sky: { primary: '#0ea5e9', primaryDark: '#0284c7', soft: '#e0f2fe', softStrong: '#bae6fd', accentText: '#0369a1' },
+                lime: { primary: '#84cc16', primaryDark: '#65a30d', soft: '#ecfccb', softStrong: '#d9f99d', accentText: '#4d7c0f' },
+                orange: { primary: '#f97316', primaryDark: '#ea580c', soft: '#ffedd5', softStrong: '#fed7aa', accentText: '#c2410c' },
+                purple: { primary: '#a855f7', primaryDark: '#9333ea', soft: '#f3e8ff', softStrong: '#e9d5ff', accentText: '#7e22ce' },
+                slate: { primary: '#475569', primaryDark: '#334155', soft: '#f1f5f9', softStrong: '#cbd5e1', accentText: '#1e293b' },
+                zinc: { primary: '#71717a', primaryDark: '#52525b', soft: '#f4f4f5', softStrong: '#e4e4e7', accentText: '#3f3f46' },
+                red: { primary: '#ef4444', primaryDark: '#dc2626', soft: '#fee2e2', softStrong: '#fecaca', accentText: '#b91c1c' },
+                green: { primary: '#22c55e', primaryDark: '#16a34a', soft: '#dcfce7', softStrong: '#bbf7d0', accentText: '#15803d' },
+                yellow: { primary: '#eab308', primaryDark: '#ca8a04', soft: '#fef9c3', softStrong: '#fde68a', accentText: '#a16207' },
+                stone: { primary: '#a16207', primaryDark: '#854d0e', soft: '#fef3c7', softStrong: '#fde68a', accentText: '#713f12' },
+                neutral: { primary: '#6b7280', primaryDark: '#4b5563', soft: '#f3f4f6', softStrong: '#e5e7eb', accentText: '#374151' }
+            };
+
+            const activePalette = palette[appState.theme] || palette.indigo;
+            document.body.classList.remove(...Array.from(document.body.classList).filter(cls => cls.startsWith('theme-')));
+            document.body.classList.add(`theme-${appState.theme}`);
+            document.documentElement.style.setProperty('--theme-primary', activePalette.primary);
+            document.documentElement.style.setProperty('--theme-primary-dark', activePalette.primaryDark);
+            document.documentElement.style.setProperty('--theme-primary-soft', activePalette.soft);
+            document.documentElement.style.setProperty('--theme-primary-soft-strong', activePalette.softStrong);
+            document.documentElement.style.setProperty('--theme-primary-text', activePalette.accentText);
+
+            const rules = [
+                { selectors: ['.bg-indigo-600', '.bg-indigo-500'], style: 'backgroundColor', value: activePalette.primary },
+                { selectors: ['.bg-indigo-50', '.bg-indigo-100'], style: 'backgroundColor', value: activePalette.soft },
+                { selectors: ['.text-indigo-600', '.text-indigo-700', '.text-indigo-800'], style: 'color', value: activePalette.accentText },
+                { selectors: ['.border-indigo-200', '.border-indigo-100'], style: 'borderColor', value: activePalette.softStrong },
+                { selectors: ['.ring-indigo-500'], style: 'boxShadow', value: `0 0 0 2px ${activePalette.soft}` },
+                { selectors: ['.text-indigo-500'], style: 'color', value: activePalette.primary }
+            ];
+
+            const applied = new Set();
+            rules.forEach(rule => {
+                rule.selectors.forEach(selector => {
+                    document.querySelectorAll(selector).forEach(el => {
+                        if (!applied.has(el)) {
+                            el.style[rule.style] = rule.value;
+                            applied.add(el);
+                        }
+                    });
+                });
+            });
+
+        }
+
+        function initThemeAndFont() {
+            document.getElementById('brand-title').innerText = appState.brandTitle;
+            document.getElementById('settings-brand-title-input').value = appState.brandTitle;
+            document.getElementById('settings-avatar-url-input').value = appState.avatarUrl;
+            document.getElementById('settings-theme-select').value = appState.theme;
+            document.getElementById('settings-font-select').value = appState.font;
+            document.getElementById('inspirational-quote-text').innerText = `"${appState.inspirationalQuote}"`;
+
+            // Avatar rendering
+            let imgEl = document.getElementById('sidebar-avatar-img');
+            let textEl = document.getElementById('sidebar-avatar-text');
+            if (appState.avatarUrl) {
+                imgEl.src = appState.avatarUrl;
+                imgEl.classList.remove('hidden');
+                textEl.classList.add('hidden');
+            } else {
+                imgEl.classList.add('hidden');
+                textEl.classList.remove('hidden');
+            }
+
+            // Apply Font
+            let fontLink = document.getElementById('google-fonts-link');
+            fontLink.href = `https://fonts.googleapis.com/css2?family=${appState.font.replace(/ /g, '+')}:wght@300;400;500;600;700&display=swap`;
+            document.body.style.fontFamily = `'${appState.font}', sans-serif`;
+            applyThemeStyles();
+        }
+
+        function saveSettings() {
+            appState.brandTitle = document.getElementById('settings-brand-title-input').value || "ESL Dashboard";
+            appState.avatarUrl = document.getElementById('settings-avatar-url-input').value || "";
+            appState.theme = document.getElementById('settings-theme-select').value;
+            appState.font = document.getElementById('settings-font-select').value;
+
+            if (document.getElementById('exchange-rate-currency-select')) {
+                const cur = document.getElementById('exchange-rate-currency-select').value;
+                const val = parseFloat(document.getElementById('exchange-rate-value-input').value);
+                if (cur && !isNaN(val)) {
+                    appState.exchangeRates[cur] = val;
+                }
+            }
+
+            saveState();
+            initThemeAndFont();
+            renderAll();
+            showToast("Settings saved successfully!");
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadInput = document.getElementById('settings-avatar-upload');
+            if (uploadInput) {
+                uploadInput.addEventListener('change', handleAvatarUpload);
+            }
+        });
+
+        function saveExchangeRate() {
+            const currency = document.getElementById('exchange-rate-currency-select')?.value;
+            const value = parseFloat(document.getElementById('exchange-rate-value-input')?.value);
+            if (!currency || isNaN(value)) {
+                showToast("Please choose a valid currency and value.", "error");
+                return;
+            }
+
+            appState.exchangeRates[currency] = value;
+            saveState();
+            renderExchangeRateManager();
+            renderAll();
+            showToast(`${currency} rate updated successfully!`);
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => {
+                const isActive = el.dataset.tab === tabId;
+                el.classList.toggle('active', isActive);
+                el.classList.remove('text-indigo-600', 'bg-indigo-50', 'hover:bg-slate-100', 'hover:text-slate-900');
+                el.classList.toggle('text-slate-600', !isActive);
+            });
+
+            let targetTab = document.getElementById(`tab-${tabId}`);
+            if (targetTab) targetTab.classList.add('active');
+
+            // Topbar title update
+            const titles = {
+                dashboard: "Dashboard Overview",
+                students: "Student Directory",
+                schedule: "Weekly Schedule Grid",
+                payments: "Payments & Earnings",
+                records: "Class Records & History",
+                reports: "Reports & Advanced Analysis",
+                settings: "System Settings"
+            };
+            document.getElementById('topbar-title').innerText = titles[tabId] || "Dashboard";
+
+            const hiddenActionTabs = ['dashboard', 'students', 'schedule', 'records', 'reports'];
+            document.getElementById('topbar-global-actions').style.display = hiddenActionTabs.includes(tabId) ? 'none' : 'flex';
+
+            renderAll();
+        }
+
+        function renderAll() {
+            let weekLabel = getWeekLabel(appState.currentSelectedWeekStart);
+            document.getElementById('sidebar-current-week-label').innerText = weekLabel;
+            document.getElementById('global-week-display').innerText = weekLabel;
+            document.getElementById('schedule-active-week-badge').innerText = weekLabel;
+
+            populateCurrencyDropdown();
+            populateMonthDropdowns();
+            applyThemeStyles();
+            renderDashboard();
+            renderStudentsList();
+            renderScheduleGrid();
+            renderPayments();
+            renderClassRecords();
+            renderReports();
+            applyThemeStyles();
+        }
+
+        function renderDashboard() {
+            let todayStr = formatDateStr(new Date());
+            let todayClasses = appState.classes.filter(c => c.date === todayStr);
+            let todayCompleted = todayClasses.filter(c => c.attendance === 'Present').length;
+            
+            document.getElementById('kpi-classes-today').innerText = todayClasses.length;
+            document.getElementById('kpi-classes-today-sub').innerHTML = `<i class="fa-solid fa-check mr-1"></i>${todayCompleted} completed / ${todayClasses.length - todayCompleted} remaining`;
+
+            // Classes this week & Weekly Revenue
+            let weekDays = getWeekDays(appState.currentSelectedWeekStart).map(d => d.dateStr);
+            let weekClasses = appState.classes.filter(c => weekDays.includes(c.date));
+            document.getElementById('kpi-classes-week').innerText = weekClasses.length;
+
+            let weekRevenue = 0;
+            weekClasses.forEach(c => {
+                if (c.attendance === 'Present' || c.attendance === 'Absent') {
+                    weekRevenue += computeClassPHP(c);
+                }
+            });
+            document.getElementById('kpi-weekly-revenue').innerText = `₱${weekRevenue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+            // Today's schedule list
+            let todayListEl = document.getElementById('dashboard-today-classes-list');
+            if (todayClasses.length === 0) {
+                todayListEl.innerHTML = `<div class="text-center py-8 text-slate-400 text-xs">No classes scheduled for today.</div>`;
+            } else {
+                todayListEl.innerHTML = todayClasses.map(c => {
+                    let st = appState.students.find(s => s.id === c.studentId);
+                    let name = st ? st.name : "Unknown Student";
+                    let badgeColor = c.attendance === 'Present' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : c.attendance === 'Absent' ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-slate-100 text-slate-600 border-slate-200';
+                    return `
+                        <div class="flex items-center justify-between p-3.5 rounded-xl border border-slate-100 bg-slate-50/50">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-xs">
+                                    ${c.time}
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800 text-xs">${name}</h4>
+                                    <p class="text-[11px] text-slate-500">${c.type} • ${c.duration} mins</p>
+                                </div>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold border ${badgeColor}">${c.attendance || 'Scheduled'}</span>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // Milestone alerts count only present classes in the current month.
+            let milestoneListEl = document.getElementById('dashboard-milestone-list');
+            let studentCompletedCounts = {};
+            let currentMonthPrefix = todayStr.substring(0, 7); // YYYY-MM
+            appState.classes.forEach(c => {
+                if (c.date.startsWith(currentMonthPrefix) && c.attendance === 'Present') {
+                    studentCompletedCounts[c.studentId] = (studentCompletedCounts[c.studentId] || 0) + 1;
+                }
+            });
+
+            let milestoneHtml = "";
+            appState.students.forEach(st => {
+                let count = studentCompletedCounts[st.id] || 0;
+                let targetHit = [15, 20, 30].filter(target => getMilestoneState(st, target) && count >= target).pop();
+
+                if (targetHit) {
+                    milestoneHtml += `
+                        <div class="flex items-center justify-between p-3.5 rounded-xl border border-violet-100 bg-violet-50/40">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-xl bg-violet-100 text-violet-700 flex items-center justify-center font-bold text-xs">
+                                    <i class="fa-solid fa-award"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800 text-xs">${st.name}</h4>
+                                    <p class="text-[11px] text-violet-600 font-medium">Completed ${count} present classes this month.</p>
+                                </div>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-violet-600 text-white">Target ${targetHit} Achieved</span>
+                        </div>
+                    `;
+                }
+            });
+
+            if (!milestoneHtml) {
+                milestoneHtml = `<div class="text-center py-8 text-slate-400 text-xs">No milestone targets hit yet this month (Targets: 15, 20, 30).</div>`;
+            }
+            milestoneListEl.innerHTML = milestoneHtml;
+        }
+
+        function populateCountryDropdown() {
+            let select = document.getElementById('modal-student-country');
+            select.innerHTML = COUNTRIES_TIMEZONES.map(ct => `<option value="${ct.country}">${ct.country} (${ct.timezone})</option>`).join('');
+        }
+
+        function populateCurrencyDropdown() {
+            let select = document.getElementById('modal-student-currency');
+            if (!select) return;
+            select.innerHTML = ALL_CURRENCIES.map(cur => `<option value="${cur}">${cur}</option>`).join('');
+        }
+
+        function getMilestoneState(student, target) {
+            if (!student || !student.milestones) return false;
+            return !!student.milestones[target];
+        }
+
+        function onStudentCountryChange() {
+            let country = document.getElementById('modal-student-country').value;
+            let found = COUNTRIES_TIMEZONES.find(c => c.country === country);
+            if (found) {
+                document.getElementById('modal-student-timezone').value = found.timezone;
+                document.getElementById('modal-student-currency').value = found.currency;
+            }
+        }
+
+        function openStudentModal(studentId = null) {
+            document.getElementById('student-modal').classList.remove('hidden');
+            if (studentId) {
+                let st = appState.students.find(s => s.id === studentId);
+                if (st) {
+                    document.getElementById('student-modal-title').innerText = "Edit Student";
+                    document.getElementById('student-edit-id').value = st.id;
+                    document.getElementById('modal-student-name').value = st.name;
+                    document.getElementById('modal-student-company').value = st.company;
+                    document.getElementById('modal-student-country').value = st.country;
+                    document.getElementById('modal-student-timezone').value = st.timezone;
+                    document.getElementById('modal-student-currency').value = st.currency;
+                    document.getElementById('modal-student-rate25').value = st.rate25;
+                    document.getElementById('modal-student-rate50').value = st.rate50;
+                    document.getElementById('modal-student-startdate').value = st.startDate;
+                    document.getElementById('modal-student-status').value = st.status;
+                    document.getElementById('modal-student-notes').value = st.notes || '';
+                    document.getElementById('student-milestone-15').checked = getMilestoneState(st, 15);
+                    document.getElementById('student-milestone-20').checked = getMilestoneState(st, 20);
+                    document.getElementById('student-milestone-30').checked = getMilestoneState(st, 30);
+                }
+            } else {
+                document.getElementById('student-modal-title').innerText = "Add New Student";
+                document.getElementById('student-edit-id').value = "";
+                document.getElementById('modal-student-name').value = "";
+                document.getElementById('modal-student-company').value = "";
+                document.getElementById('modal-student-country').selectedIndex = 0;
+                onStudentCountryChange();
+                document.getElementById('modal-student-rate25').value = 100;
+                document.getElementById('modal-student-rate50').value = 200;
+                document.getElementById('modal-student-startdate').value = formatDateStr(new Date());
+                document.getElementById('modal-student-status').value = "Active";
+                document.getElementById('modal-student-notes').value = "";
+                document.getElementById('student-milestone-15').checked = false;
+                document.getElementById('student-milestone-20').checked = false;
+                document.getElementById('student-milestone-30').checked = false;
+            }
+        }
+
+        function closeStudentModal() {
+            document.getElementById('student-modal').classList.add('hidden');
+        }
+
+        function saveStudentModal() {
+            let id = document.getElementById('student-edit-id').value;
+            let name = document.getElementById('modal-student-name').value.trim();
+            if (!name) {
+                showToast("Please enter a student name.", "error");
+                return;
+            }
+
+            let studentData = {
+                id: id || 's_' + Date.now(),
+                name: name,
+                company: document.getElementById('modal-student-company').value.trim() || 'Independent',
+                country: document.getElementById('modal-student-country').value,
+                timezone: document.getElementById('modal-student-timezone').value,
+                currency: document.getElementById('modal-student-currency').value,
+                rate25: parseFloat(document.getElementById('modal-student-rate25').value) || 0,
+                rate50: parseFloat(document.getElementById('modal-student-rate50').value) || 0,
+                startDate: document.getElementById('modal-student-startdate').value || formatDateStr(new Date()),
+                status: document.getElementById('modal-student-status').value,
+                notes: document.getElementById('modal-student-notes').value.trim(),
+                milestones: {
+                    15: document.getElementById('student-milestone-15').checked,
+                    20: document.getElementById('student-milestone-20').checked,
+                    30: document.getElementById('student-milestone-30').checked
+                }
+            };
+
+            if (id) {
+                let idx = appState.students.findIndex(s => s.id === id);
+                if (idx !== -1) appState.students[idx] = studentData;
+                showToast("Student updated successfully!");
+            } else {
+                appState.students.push(studentData);
+                showToast("Student added successfully!");
+            }
+
+            saveState();
+            closeStudentModal();
+            renderAll();
+        }
+
+        function deleteStudent(studentId) {
+            appState.students = appState.students.filter(s => s.id !== studentId);
+            appState.classes = appState.classes.filter(c => c.studentId !== studentId);
+            saveState();
+            renderAll();
+            showToast("Student deleted.");
+        }
+
+        function renderStudentsList() {
+            let search = document.getElementById('student-search-input').value.toLowerCase();
+            let tbody = document.getElementById('students-table-body');
+            
+            let filtered = appState.students.filter(s => s.name.toLowerCase().includes(search) || s.company.toLowerCase().includes(search) || s.country.toLowerCase().includes(search));
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-slate-400">No students found.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(st => {
+                let completedCount = appState.classes.filter(c => c.studentId === st.id && c.attendance === 'Present').length;
+                let statusBadge = st.status === 'Active' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-slate-100 text-slate-600 border-slate-200';
+                let milestoneBadges = [15, 20, 30].map(target => {
+                    const active = getMilestoneState(st, target);
+                    return `<span class="px-1.5 py-0.5 rounded-full text-[10px] font-semibold ${active ? 'bg-violet-100 text-violet-700' : 'bg-slate-100 text-slate-400'}">${target}</span>`;
+                }).join('');
+                return `
+                    <tr class="hover:bg-slate-50/80 transition">
+                        <td class="py-4 px-6 font-bold text-slate-900">
+                            ${st.name}
+                            ${st.notes ? `<div class="text-[11px] font-normal text-slate-500 truncate max-w-xs" title="${st.notes}"><i class="fa-regular fa-note-sticky mr-1"></i>${st.notes}</div>` : ''}
+                        </td>
+                        <td class="py-4 px-4 text-slate-600 font-medium">${st.company}</td>
+                        <td class="py-4 px-4 text-slate-600">${st.country}<div class="text-[11px] text-slate-400">${st.timezone}</div></td>
+                        <td class="py-4 px-4 font-semibold text-slate-800">${st.currency} ${st.rate25} / ${st.rate50}</td>
+                        <td class="py-4 px-4 text-slate-700 font-bold">${completedCount} classes</td>
+                        <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-full text-xs font-semibold border ${statusBadge}">${st.status}</span></td>
+                        <td class="py-4 px-6 text-right space-x-2">
+                            <div class="flex justify-end gap-1 mb-2">${milestoneBadges}</div>
+                            <div class="flex justify-end gap-2">
+                                <button onclick="openStudentModal('${st.id}')" class="p-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg transition" title="Edit"><i class="fa-solid fa-pen text-xs"></i></button>
+                                <button onclick="deleteStudent('${st.id}')" class="p-1.5 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-lg transition" title="Delete"><i class="fa-solid fa-trash text-xs"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function populateTimeDropdown() {
+            let select = document.getElementById('modal-class-time');
+            let times = [];
+            // 8:00 AM to 3:30 AM next day in 30 min intervals
+            let hours = [8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,0,1,2,3];
+            let minutes = ["00", "30"];
+            
+            hours.forEach(h => {
+                minutes.forEach(m => {
+                    let hh = String(h).padStart(2, '0');
+                    times.push(`${hh}:${m}`);
+                });
+            });
+
+            select.innerHTML = times.map(t => {
+                let [h, m] = t.split(':').map(Number);
+                let ampm = h >= 12 ? 'PM' : 'AM';
+                let displayH = h % 12 === 0 ? 12 : h % 12;
+                return `<option value="${t}">${displayH}:${String(m).padStart(2, '0')} ${ampm}</option>`;
+            }).join('');
+        }
+
+        function openAddClassModal(classId = null, prefillDate = null, prefillTime = null) {
+            if (appState.students.length === 0) {
+                showToast("Please add at least one student before scheduling classes.", "error");
+                switchTab('students');
+                return;
+            }
+
+            let studentSelect = document.getElementById('modal-class-student');
+            studentSelect.innerHTML = appState.students.map(s => `<option value="${s.id}">${s.name} (${s.company})</option>`).join('');
+
+            document.getElementById('class-modal').classList.remove('hidden');
+            if (classId) {
+                let c = appState.classes.find(item => item.id === classId);
+                if (c) {
+                    document.getElementById('class-modal-title').innerText = "Edit Class Slot";
+                    document.getElementById('class-edit-id').value = c.id;
+                    document.getElementById('modal-class-student').value = c.studentId;
+                    document.getElementById('modal-class-date').value = c.date;
+                    document.getElementById('modal-class-time').value = c.time;
+                    document.getElementById('modal-class-type').value = c.type;
+                    document.getElementById('modal-class-duration').value = c.duration;
+                }
+            } else {
+                document.getElementById('class-modal-title').innerText = "Schedule New Class Slot";
+                document.getElementById('class-edit-id').value = "";
+                document.getElementById('modal-class-date').value = prefillDate || formatDateStr(new Date());
+                if (prefillTime) document.getElementById('modal-class-time').value = prefillTime;
+                document.getElementById('modal-class-type').value = "Regular";
+                document.getElementById('modal-class-duration').value = "25";
+            }
+        }
+
+        function closeClassModal() {
+            document.getElementById('class-modal').classList.add('hidden');
+        }
+
+        function saveClassModal() {
+            let id = document.getElementById('class-edit-id').value;
+            let studentId = document.getElementById('modal-class-student').value;
+            let date = document.getElementById('modal-class-date').value;
+            let time = document.getElementById('modal-class-time').value;
+            let type = document.getElementById('modal-class-type').value;
+            let duration = parseInt(document.getElementById('modal-class-duration').value);
+
+            if (!date || !time) {
+                showToast("Please select date and time.", "error");
+                return;
+            }
+
+            // Time conflict check (overlapping time ranges)
+            let [newH, newM] = time.split(':').map(Number);
+            let newStartMinutes = newH * 60 + newM;
+            let newEndMinutes = newStartMinutes + duration;
+
+            let hasConflict = appState.classes.some(c => {
+                if (c.id === id) return false; // ignore self when editing
+                if (c.date !== date) return false;
+                let [cH, cM] = c.time.split(':').map(Number);
+                let cStartMinutes = cH * 60 + cM;
+                let cEndMinutes = cStartMinutes + c.duration;
+
+                // Check overlap condition
+                return (newStartMinutes < cEndMinutes && newEndMinutes > cStartMinutes);
+            });
+
+            if (hasConflict) {
+                showToast("Time conflict warning: Another class is already scheduled during this time slot!", "error");
+                return;
+            }
+
+            let classData = {
+                id: id || 'c_' + Date.now(),
+                studentId: studentId,
+                date: date,
+                time: time,
+                type: type,
+                duration: duration,
+                attendance: id ? (appState.classes.find(c => c.id === id)?.attendance || "Scheduled") : "Scheduled",
+                paidStatus: id ? (appState.classes.find(c => c.id === id)?.paidStatus || "Pending") : "Pending"
+            };
+
+            if (id) {
+                let idx = appState.classes.findIndex(c => c.id === id);
+                if (idx !== -1) appState.classes[idx] = classData;
+                showToast("Class slot updated successfully!");
+            } else {
+                appState.classes.push(classData);
+                showToast("Class scheduled successfully!");
+            }
+
+            saveState();
+            closeClassModal();
+            renderAll();
+        }
+
+        // Action Modal on clicking a scheduled class block
+        function openClassActionModal(classId) {
+            let c = appState.classes.find(item => item.id === classId);
+            if (!c) return;
+            let st = appState.students.find(s => s.id === c.studentId);
+            document.getElementById('action-class-id').value = c.id;
+            
+            let [h, m] = c.time.split(':').map(Number);
+            let ampm = h >= 12 ? 'PM' : 'AM';
+            let displayH = h % 12 === 0 ? 12 : h % 12;
+            let timeStr = `${displayH}:${String(m).padStart(2, '0')} ${ampm}`;
+
+            document.getElementById('action-modal-details').innerHTML = `
+                <div><strong>Student:</strong> ${st ? st.name : 'Unknown'}</div>
+                <div><strong>Date & Time:</strong> ${c.date} at ${timeStr}</div>
+                <div><strong>Type & Duration:</strong> ${c.type} (${c.duration} mins)</div>
+                <div><strong>Status:</strong> <span class="font-bold text-indigo-600">${c.attendance || 'Scheduled'}</span></div>
+            `;
+            document.getElementById('class-action-modal').classList.remove('hidden');
+        }
+
+        function closeClassActionModal() {
+            document.getElementById('class-action-modal').classList.add('hidden');
+        }
+
+        function markClassAttendance(status) {
+            let id = document.getElementById('action-class-id').value;
+            let c = appState.classes.find(item => item.id === id);
+            if (c) {
+                c.attendance = status;
+                saveState();
+                closeClassActionModal();
+                renderAll();
+                showToast(`Class marked as ${status}!`);
+            }
+        }
+
+        function editClassFromAction() {
+            let id = document.getElementById('action-class-id').value;
+            closeClassActionModal();
+            openAddClassModal(id);
+        }
+
+        function deleteClassFromAction() {
+            let id = document.getElementById('action-class-id').value;
+            appState.classes = appState.classes.filter(c => c.id !== id);
+            saveState();
+            closeClassActionModal();
+            renderAll();
+            showToast("Class slot deleted.");
+        }
+
+        // Render 24-hour Schedule Grid
+        function renderScheduleGrid() {
+            let gridWrapper = document.getElementById('schedule-grid-wrapper');
+            let weekDays = getWeekDays(appState.currentSelectedWeekStart);
+
+            let hoursList = [];
+            for (let h = 8; h <= 23; h++) { hoursList.push(h); }
+            for (let h = 0; h <= 4; h++) { hoursList.push(h); } // Next day up to 4:00 AM
+
+            let html = `
+                <table class="w-full border-collapse min-w-[900px] text-xs">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-slate-200 sticky top-0 z-10">
+                            <th class="py-3 px-3 text-left font-bold text-slate-500 w-20 border-r border-slate-200">Time</th>
+                            ${weekDays.map(d => `
+                                <th class="py-3 px-3 text-center border-r border-slate-200 font-semibold text-slate-700">
+                                    <div>${d.dayName}</div>
+                                    <div class="text-[11px] text-slate-400 font-normal">${d.displayDate}</div>
+                                </th>
+                            `).join('')}
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+            `;
+
+            hoursList.forEach(h => {
+                ["00", "30"].forEach(m => {
+                    let timeStr = `${String(h).padStart(2, '0')}:${m}`;
+                    let displayH = h % 12 === 0 ? 12 : h % 12;
+                    let ampm = h >= 12 ? 'PM' : 'AM';
+                    let timeDisplay = `${displayH}:${m} ${ampm}`;
+
+                    html += `<tr class="h-12 hover:bg-slate-50/50 transition">`;
+                    html += `<td class="py-2 px-3 font-semibold text-slate-500 border-r border-slate-200 bg-slate-50/30 whitespace-nowrap">${timeDisplay}</td>`;
+
+                    weekDays.forEach(day => {
+                        // Find class matching date and time
+                        let cls = appState.classes.find(c => c.date === day.dateStr && c.time === timeStr);
+                        if (cls) {
+                            let st = appState.students.find(s => s.id === cls.studentId);
+                            let bgCol = cls.attendance === 'Present' ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : cls.attendance === 'Absent' ? 'bg-amber-50 border-amber-200 text-amber-800' : cls.attendance === 'Cancelled' ? 'bg-rose-50 border-rose-200 text-rose-800' : 'bg-indigo-50 border-indigo-200 text-indigo-800';
+                            
+                            // Calculate row span depending on duration (25m = 1 cell, 50m = 2 cells approx)
+                            let rowSpan = cls.duration >= 50 ? 2 : 1;
+
+                            html += `
+                                <td class="p-1 border-r border-slate-200 relative" ${rowSpan > 1 ? `rowspan="${rowSpan}"` : ''}>
+                                    <div onclick="openClassActionModal('${cls.id}')" class="w-full h-full p-2 rounded-xl border ${bgCol} shadow-xs cursor-pointer flex flex-col justify-between overflow-hidden transition hover:shadow-md">
+                                        <div class="flex items-center justify-between">
+                                            <span class="font-bold truncate">${st ? st.name : 'Student'}</span>
+                                            <span class="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-white/60">${cls.duration}m</span>
+                                        </div>
+                                        <div class="text-[10px] opacity-80 truncate">${cls.type} • ${cls.attendance || 'Scheduled'}</div>
+                                    </div>
+                                </td>
+                            `;
+                        } else {
+                            html += `
+                                <td class="p-1 border-r border-slate-200 text-center">
+                                    <button onclick="openAddClassModal(null, '${day.dateStr}', '${timeStr}')" class="w-full h-full min-h-[36px] rounded-lg hover:bg-indigo-50/50 text-slate-300 hover:text-indigo-600 flex items-center justify-center transition group" title="Add Slot">
+                                        <i class="fa-solid fa-plus text-[10px] opacity-0 group-hover:opacity-100"></i>
+                                    </button>
+                                </td>
+                            `;
+                        }
+                    });
+
+                    html += `</tr>`;
+                });
+            });
+
+            html += `</tbody></table>`;
+            gridWrapper.innerHTML = html;
+        }
+
+        function renderPayments() {
+            let container = document.getElementById('payments-groups-container');
+            const selectedMonday = formatDateStr(getMonday(appState.currentSelectedWeekStart || new Date()));
+
+            let studentWeeks = {};
+            appState.classes.forEach(c => {
+                if (c.attendance !== 'Present' && c.attendance !== 'Absent') return;
+                let mon = formatDateStr(getMonday(c.date));
+                if (mon !== selectedMonday) return;
+
+                let key = `${c.studentId}_${mon}`;
+                if (!studentWeeks[key]) {
+                    studentWeeks[key] = { studentId: c.studentId, mondayStr: mon, classes: [] };
+                }
+                studentWeeks[key].classes.push(c);
+            });
+
+            let groupKeys = Object.keys(studentWeeks);
+            if (groupKeys.length === 0) {
+                container.innerHTML = `<div class="bg-white rounded-2xl border border-slate-200 p-8 text-center text-slate-400 text-sm">No payment records available for the selected week.</div>`;
+                document.getElementById('payments-total-sum-badge').innerText = "Total: ₱0.00";
+                return;
+            }
+
+            let grandTotalPHP = 0;
+            let html = "";
+
+            groupKeys.forEach(key => {
+                let group = studentWeeks[key];
+                let st = appState.students.find(s => s.id === group.studentId);
+                if (!st) return;
+
+                let weekLabel = getWeekLabel(group.mondayStr);
+                let currency = st.currency || 'PHP';
+                let exchangeRate = appState.exchangeRates[currency] || 1.0;
+                let paidCount = group.classes.filter(isClassPaid).length;
+                let isPaid = paidCount === group.classes.length;
+
+                let weeklyPHP = 0;
+                group.classes.forEach(c => {
+                    if (c.attendance === 'Present' || c.attendance === 'Absent') {
+                        weeklyPHP += computeClassPHP(c);
+                    }
+                    if (isClassPaid(c)) {
+                        grandTotalPHP += computeClassPHP(c);
+                    }
+                });
+
+                html += `
+                    <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
+                        <div class="bg-slate-50 p-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white font-bold flex items-center justify-center text-sm">
+                                    ${st.name.charAt(0)}
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800 text-sm">${st.name} <span class="text-xs text-slate-500 font-normal">(${st.company})</span></h4>
+                                    <p class="text-xs font-semibold text-red-700">Week: ${weekLabel}</p>
+                                    <p class="text-xs font-semibold text-red-700">Exchange rate: 1 ${currency} = ₱${exchangeRate.toLocaleString('en-US', { maximumFractionDigits: 6 })} PHP</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div class="text-right">
+                                    <div class="text-xs text-slate-400 font-semibold uppercase">Total PHP</div>
+                                    <div class="text-base font-bold text-red-700">₱${weeklyPHP.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                                </div>
+                                <button onclick="togglePaidStatus('${key}')" class="px-4 py-2 rounded-xl text-xs font-bold transition shadow-xs ${
+                                    isPaid ? 'bg-emerald-600 text-white hover:bg-emerald-700' : 'bg-amber-500 text-white hover:bg-amber-600'
+                                }">
+                                    ${isPaid ? '<i class="fa-solid fa-check mr-1"></i> Paid' : paidCount ? 'Mark Remaining Paid' : 'Mark Paid'}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <table class="w-full text-left text-xs">
+                                <thead>
+                                    <tr class="text-slate-400 border-b border-slate-100 pb-2">
+                                        <th class="pb-2">Date & Time</th>
+                                        <th class="pb-2">Type</th>
+                                        <th class="pb-2">Duration</th>
+                                        <th class="pb-2">Attendance</th>
+                                        <th class="pb-2 text-right">Computed Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-50">
+                `;
+
+                group.classes.forEach(c => {
+                    let phpAmt = computeClassPHP(c);
+                    html += `
+                        <tr class="hover:bg-slate-50/50">
+                            <td class="py-2.5 font-semibold text-red-700">${c.date} at ${c.time}</td>
+                            <td class="py-2.5 text-slate-600">${c.type}</td>
+                            <td class="py-2.5 text-slate-600">${c.duration} mins</td>
+                            <td class="py-2.5 font-semibold ${c.attendance === 'Present' ? 'text-emerald-600' : c.attendance === 'Absent' ? 'text-amber-600' : 'text-slate-500'}">${c.attendance}</td>
+                            <td class="py-2.5 text-right font-bold text-red-700">₱${phpAmt.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                        </tr>
+                    `;
+                });
+
+                html += `
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            document.getElementById('payments-total-sum-badge').innerText = `Total Paid: ₱${grandTotalPHP.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+
+        function togglePaidStatus(key) {
+            const payableClasses = appState.classes.filter(c =>
+                getClassPaymentKey(c) === key && (c.attendance === 'Present' || c.attendance === 'Absent')
+            );
+            const allPaid = payableClasses.length > 0 && payableClasses.every(isClassPaid);
+            if (allPaid) {
+                delete appState.paidWeeks[key];
+            } else {
+                const existing = appState.paidWeeks[key];
+                const classAmounts = existing && typeof existing === 'object' && existing.classAmounts
+                    ? { ...existing.classAmounts }
+                    : {};
+                payableClasses.forEach(cls => {
+                    if (!Object.prototype.hasOwnProperty.call(classAmounts, cls.id)) {
+                        classAmounts[cls.id] = computeCurrentClassPHP(cls);
+                    }
+                });
+                appState.paidWeeks[key] = { classAmounts };
+            }
+            saveState();
+            renderAll();
+            showToast(allPaid ? "Marked as Pending." : "Marked as Paid!");
+        }
+
+        function populateMonthDropdowns() {
+            const monthSet = new Map();
+            appState.classes.forEach(c => {
+                const [year, month] = c.date.split('-');
+                const key = `${year}-${month}`;
+                if (!monthSet.has(key)) {
+                    const date = new Date(`${year}-${month}-01T00:00:00`);
+                    monthSet.set(key, date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }));
+                }
+            });
+
+            const months = Array.from(monthSet.entries()).sort((a, b) => a[0] < b[0] ? 1 : -1);
+            const buildHtml = (selectedValue) => {
+                const options = [`<option value="all">All Months</option>`];
+                months.forEach(([value, label]) => {
+                    options.push(`<option value="${value}" ${selectedValue === value ? 'selected' : ''}>${label}</option>`);
+                });
+                return options.join('');
+            };
+
+            const recordSelected = document.getElementById('record-month-select')?.value || 'all';
+            const reportSelected = document.getElementById('report-month-select')?.value || 'all';
+            document.getElementById('record-month-select').innerHTML = buildHtml(recordSelected);
+            document.getElementById('report-month-select').innerHTML = buildHtml(reportSelected);
+        }
+
+        function renderClassRecords() {
+            let search = document.getElementById('record-search').value.toLowerCase();
+            let selectedMonth = document.getElementById('record-month-select').value;
+            let selectedStatus = document.getElementById('record-status-select').value;
+            let tbody = document.getElementById('records-table-body');
+
+            let filtered = appState.classes.filter(c => {
+                let st = appState.students.find(s => s.id === c.studentId);
+                let nameMatch = !search || (st ? st.name.toLowerCase().includes(search) || st.company.toLowerCase().includes(search) : false);
+                let monthMatch = selectedMonth === 'all' || c.date.startsWith(selectedMonth);
+                let statusMatch = selectedStatus === 'all' || c.attendance === selectedStatus;
+                return nameMatch && monthMatch && statusMatch;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-slate-400">No class records found.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(c => {
+                let st = appState.students.find(s => s.id === c.studentId);
+                let phpAmt = computeClassPHP(c);
+                let attendanceBadge = c.attendance === 'Present' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : c.attendance === 'Absent' ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-rose-50 text-rose-700 border-rose-200';
+                return `
+                    <tr class="hover:bg-slate-50/80 transition">
+                        <td class="py-4 px-6 font-bold text-red-700">${c.date} <span class="text-xs text-red-400 font-normal">(${c.time})</span></td>
+                        <td class="py-4 px-4 font-semibold text-slate-800">${st ? st.name : 'Unknown'}</td>
+                        <td class="py-4 px-4 text-slate-600">${st ? st.company : '-'}</td>
+                        <td class="py-4 px-4 text-slate-600">${c.type}</td>
+                        <td class="py-4 px-4 text-slate-600">${c.duration} mins</td>
+                        <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-full text-xs font-semibold border ${attendanceBadge}">${c.attendance || 'Scheduled'}</span></td>
+                        <td class="py-4 px-6 text-right font-bold text-red-700">₱${phpAmt.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderReports() {
+            let selectedMonth = document.getElementById('report-month-select').value;
+            let selectedStatus = document.getElementById('report-status-select').value;
+            let monthClasses = appState.classes.filter(c => {
+                let monthMatch = selectedMonth === 'all' || c.date.startsWith(selectedMonth);
+                let statusMatch = selectedStatus === 'all' || c.attendance === selectedStatus;
+                return monthMatch && statusMatch;
+            });
+
+            let monthlyRevenue = 0;
+            let totalConducted = monthClasses.filter(c => c.attendance === 'Present').length;
+            let cancelledCount = monthClasses.filter(c => c.attendance === 'Cancelled').length;
+            let totalPresentOrAbsent = monthClasses.filter(c => c.attendance === 'Present' || c.attendance === 'Absent').length;
+
+            monthClasses.forEach(c => {
+                if (c.attendance === 'Present' || c.attendance === 'Absent') {
+                    monthlyRevenue += computeClassPHP(c);
+                }
+            });
+
+            let attendanceRate = totalPresentOrAbsent > 0 ? Math.round((totalConducted / totalPresentOrAbsent) * 100) : 0;
+
+            document.getElementById('report-monthly-revenue').innerText = `₱${monthlyRevenue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            document.getElementById('report-attendance-rate').innerText = `${attendanceRate}%`;
+            document.getElementById('report-cancelled-count').innerText = cancelledCount;
+            document.getElementById('report-total-conducted').innerText = totalConducted;
+
+            // Company breakdown
+            let companyRevenue = {};
+            monthClasses.forEach(c => {
+                if (c.attendance === 'Present' || c.attendance === 'Absent') {
+                    let st = appState.students.find(s => s.id === c.studentId);
+                    let comp = st ? st.company : 'Independent';
+                    companyRevenue[comp] = (companyRevenue[comp] || 0) + computeClassPHP(c);
+                }
+            });
+
+            let breakdownEl = document.getElementById('report-company-breakdown');
+            let comps = Object.keys(companyRevenue);
+            if (comps.length === 0) {
+                breakdownEl.innerHTML = `<div class="text-center py-6 text-slate-400 text-xs">No revenue data for this period.</div>`;
+            } else {
+                breakdownEl.innerHTML = comps.map(comp => {
+                    let rev = companyRevenue[comp];
+                    let pct = monthlyRevenue > 0 ? Math.round((rev / monthlyRevenue) * 100) : 0;
+                    return `
+                        <div class="space-y-1">
+                            <div class="flex items-center justify-between text-xs font-semibold">
+                                <span class="text-slate-800">${comp}</span>
+                                <span class="text-red-700">₱${rev.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${pct}%)</span>
+                            </div>
+                            <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                                <div class="bg-indigo-600 h-full rounded-full" style="width: ${pct}%"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        function populateExchangeRateManager() {
+            const currencySelect = document.getElementById('exchange-rate-currency-select');
+            const valueInput = document.getElementById('exchange-rate-value-input');
+            const currencyCodes = Array.from(new Set([...ALL_CURRENCIES, ...Object.keys(appState.exchangeRates || {})])).sort();
+
+            if (currencySelect) {
+                const currentValue = currencySelect.value || 'PHP';
+                currencySelect.innerHTML = currencyCodes.map(cur => `<option value="${cur}">${cur}${cur === 'PHP' ? ' - Philippine Peso' : ''}</option>`).join('');
+                currencySelect.value = currencyCodes.includes(currentValue) ? currentValue : 'PHP';
+            }
+
+            if (valueInput) {
+                const selectedCurrency = currencySelect ? currencySelect.value : 'PHP';
+                valueInput.value = appState.exchangeRates?.[selectedCurrency] ?? DEFAULT_EXCHANGE_RATES[selectedCurrency] ?? 1;
+            }
+
+            renderExchangeRateManager();
+        }
+
+        function renderExchangeRateManager() {
+            const container = document.getElementById('exchange-rates-container');
+            if (!container) return;
+
+            const visibleCodes = COMMON_EXCHANGE_CURRENCIES.filter(cur =>
+                ALL_CURRENCIES.includes(cur) || Object.prototype.hasOwnProperty.call(appState.exchangeRates || {}, cur)
+            );
+
+            const rows = visibleCodes.map(cur => {
+                const value = Number(appState.exchangeRates?.[cur] ?? DEFAULT_EXCHANGE_RATES[cur] ?? 1);
+                return `
+                    <button type="button" data-currency="${cur}" class="exchange-rate-row flex items-center justify-between w-full px-4 py-3 border-b border-slate-100 text-left hover:bg-slate-50 transition">
+                        <span class="font-bold text-slate-700 text-sm tracking-wide">${cur}</span>
+                        <span class="text-sm font-semibold text-slate-600">${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 6 })} PHP</span>
+                    </button>
+                `;
+            }).join('');
+
+            container.innerHTML = rows;
+            container.querySelectorAll('.exchange-rate-row').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const selected = btn.dataset.currency;
+                    const currentValue = appState.exchangeRates?.[selected] ?? DEFAULT_EXCHANGE_RATES[selected] ?? 1;
+                    const currencySelect = document.getElementById('exchange-rate-currency-select');
+                    const valueInput = document.getElementById('exchange-rate-value-input');
+                    if (currencySelect) currencySelect.value = selected;
+                    if (valueInput) valueInput.value = currentValue;
+                });
+            });
+        }
+
+        // Inspirational Quote Modal Edit
+        function editInspirationalQuote() {
+            document.getElementById('modal-quote-input').value = appState.inspirationalQuote;
+            document.getElementById('quote-modal').classList.remove('hidden');
+        }
+
+        function closeQuoteModal() {
+            document.getElementById('quote-modal').classList.add('hidden');
+        }
+
+        function saveQuoteModal() {
+            appState.inspirationalQuote = document.getElementById('modal-quote-input').value.trim() || appState.inspirationalQuote;
+            saveState();
+            closeQuoteModal();
+            initThemeAndFont();
+            showToast("Inspirational quote updated!");
+        }
+    </script>
+</body>
+</html>
