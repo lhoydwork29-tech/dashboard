@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: dashboard
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: DASHBOARD_USER
+        value: teacher
+      - key: DASHBOARD_PASSWORD
+        generateValue: true
+      - key: DATA_DIR
+        value: /tmp/dashboard-data

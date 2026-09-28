@@ -1,0 +1,9 @@
+{
+  "name": "dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ESL teacher dashboard with shared persistent state",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

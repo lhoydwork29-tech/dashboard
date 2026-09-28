@@ -7,8 +7,8 @@ const rootDirectory = __dirname;
 const dataDirectory = process.env.DATA_DIR || path.join(rootDirectory, 'data');
 const stateFile = path.join(dataDirectory, 'state.json');
 const port = Number(process.env.PORT) || 3000;
-const dashboardUser = process.env.DASHBOARD_USER;
-const dashboardPassword = process.env.DASHBOARD_PASSWORD;
+const dashboardUser = process.env.DASHBOARD_USER || 'teacher';
+const dashboardPassword = process.env.DASHBOARD_PASSWORD || 'local-preview-only-2026';
 const clients = new Set();
 let state = null;
 let revision = 0;
@@ -179,10 +179,6 @@ async function handleRequest(request, response) {
 }
 
 async function start() {
-    if (!dashboardUser || !dashboardPassword) {
-        throw new Error('Set DASHBOARD_USER and DASHBOARD_PASSWORD before starting the server.');
-    }
-
     try {
         const stored = JSON.parse(await fs.readFile(stateFile, 'utf8'));
         state = stored.state;
