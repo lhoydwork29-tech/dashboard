@@ -159,6 +159,12 @@
                     <span id="live-clock-badge" class="hidden sm:inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100">
                         <i class="fa-regular fa-clock mr-1.5"></i> <span id="header-clock">--:--:--</span>
                     </span>
+                    <div class="inline-flex items-center gap-2 text-xs font-semibold" aria-live="polite">
+                        <span id="sync-status" class="inline-flex items-center gap-1.5 text-slate-500">
+                            <i class="fa-solid fa-circle-notch fa-spin"></i><span>Loading data</span>
+                        </span>
+                        <button id="sync-retry" onclick="window.location.reload()" class="hidden text-indigo-600 hover:underline" type="button">Retry</button>
+                    </div>
                 </div>
 
                 <div id="topbar-global-actions" class="flex items-center space-x-4" style="display: none;">
@@ -924,53 +930,140 @@
         }
 
         const syncClientId = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`;
+        let serverRevision = null;
+        let localSyncGeneration = 0;
+        let pendingSaveCount = 0;
+        let stateLoaded = false;
+        let saveQueue = Promise.resolve();
+
+        function setSyncStatus(message, status) {
+            const element = document.getElementById('sync-status');
+            const icon = status === 'saving' ? 'fa-circle-notch fa-spin' : status === 'error' ? 'fa-circle-exclamation' : status === 'synced' ? 'fa-circle-check' : 'fa-circle-notch fa-spin';
+            const color = status === 'error' ? 'text-rose-600' : status === 'saving' || status === 'loading' ? 'text-amber-600' : 'text-emerald-700';
+            element.className = `inline-flex items-center gap-1.5 ${color}`;
+            element.innerHTML = `<i class="fa-solid ${icon}"></i><span>${message}</span>`;
+            document.getElementById('sync-retry').classList.toggle('hidden', status !== 'error');
+        }
+
+        function acceptServerState(nextState, nextRevision) {
+            const incomingRevision = Number(nextRevision);
+            if (!Number.isSafeInteger(incomingRevision) || (serverRevision !== null && incomingRevision < serverRevision)) return;
+            serverRevision = incomingRevision;
+            if (nextState) {
+                appState = { ...appState, ...nextState };
+                ensureAllExchangeRates();
+                initThemeAndFont();
+                renderAll();
+            }
+        }
 
         async function loadState() {
+            setSyncStatus('Loading data', 'loading');
             try {
-                const response = await fetch('/api/state');
+                const response = await fetch('/api/state', { cache: 'no-store' });
                 if (!response.ok) throw new Error(`State request failed: ${response.status}`);
-                const { state } = await response.json();
-                if (state) {
-                    appState = { ...appState, ...state };
-                } else {
-                    saveState();
+                const payload = await response.json();
+                if (serverRevision === null || Number(payload.revision) >= serverRevision) {
+                    acceptServerState(payload.state, payload.revision);
                 }
-            } catch (e) {
-                console.error("Error loading shared state:", e);
+                stateLoaded = true;
+                if (!payload.state && serverRevision === 0) await saveState();
+                else setSyncStatus('Synced', 'synced');
+                return true;
+            } catch (error) {
+                console.error('Error loading shared state:', error);
+                setSyncStatus('Sync unavailable', 'error');
+                return false;
             }
         }
 
         function saveState() {
+            if (!stateLoaded || serverRevision === null) {
+                setSyncStatus('Waiting for server', 'error');
+                return Promise.resolve(false);
+            }
+
             try {
                 ensureAllExchangeRates();
-                const state = JSON.stringify(appState);
-                fetch('/api/state', {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'X-Client-Id': syncClientId },
-                    body: state,
-                    keepalive: new TextEncoder().encode(state).byteLength <= 60 * 1024
-                }).catch(e => {
-                    console.error("Error saving shared state:", e);
-                    showToast("Changes could not be saved. Keep this page open and try again.", "error");
+                const snapshot = JSON.stringify(appState);
+                const generation = localSyncGeneration;
+                pendingSaveCount++;
+                setSyncStatus('Saving', 'saving');
+
+                const operation = saveQueue.then(async () => {
+                    if (generation !== localSyncGeneration) return 'stale';
+
+                    const response = await fetch('/api/state', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'If-Match': String(serverRevision),
+                            'X-Client-Id': syncClientId
+                        },
+                        body: snapshot,
+                        keepalive: new TextEncoder().encode(snapshot).byteLength <= 60 * 1024
+                    });
+                    const payload = await response.json();
+                    if (response.status === 409) {
+                        localSyncGeneration++;
+                        acceptServerState(payload.state, payload.revision);
+                        setSyncStatus('Server changed', 'error');
+                        showToast('Newer server data was loaded. Reapply your change if it is still needed.', 'error');
+                        return 'conflict';
+                    }
+                    if (!response.ok) throw new Error(payload.error || `Save failed: ${response.status}`);
+
+                    serverRevision = Math.max(serverRevision ?? 0, Number(payload.revision));
+                    return 'saved';
                 });
-            } catch (e) {
-                console.error("Error preparing shared state:", e);
+
+                const completed = operation.catch(error => {
+                    console.error('Error saving shared state:', error);
+                    setSyncStatus('Save failed', 'error');
+                    showToast('Changes could not be saved. Check your connection and retry.', 'error');
+                    return 'error';
+                }).then(result => {
+                    pendingSaveCount--;
+                    if (pendingSaveCount === 0 && result === 'saved') setSyncStatus('Synced', 'synced');
+                    return result === 'saved';
+                });
+                saveQueue = completed.then(() => undefined);
+                return completed;
+            } catch (error) {
+                console.error('Error preparing shared state:', error);
+                setSyncStatus('Save failed', 'error');
+                return Promise.resolve(false);
             }
         }
 
         const sharedStateEvents = new EventSource('/api/events');
+        sharedStateEvents.onopen = function () {
+            if (stateLoaded && pendingSaveCount === 0) setSyncStatus('Synced', 'synced');
+        };
+        sharedStateEvents.onerror = function () {
+            if (stateLoaded && pendingSaveCount === 0) setSyncStatus('Reconnecting', 'loading');
+        };
         sharedStateEvents.onmessage = function (event) {
-            const update = JSON.parse(event.data);
-            if (update.clientId === syncClientId) return;
-            appState = { ...appState, ...update.state };
-            ensureAllExchangeRates();
-            initThemeAndFont();
-            renderAll();
+            try {
+                const update = JSON.parse(event.data);
+                if (update.clientId === syncClientId || Number(update.revision) <= (serverRevision ?? 0)) return;
+                localSyncGeneration++;
+                acceptServerState(update.state, update.revision);
+                if (pendingSaveCount) {
+                    setSyncStatus('Server changed', 'error');
+                    showToast('Newer data arrived from another device. Review the latest server data.', 'error');
+                } else {
+                    setSyncStatus('Synced from another device', 'synced');
+                }
+            } catch (error) {
+                console.error('Could not apply shared state update:', error);
+                setSyncStatus('Sync error', 'error');
+            }
         };
 
         // Initialize on window load
         window.onload = async function () {
-            await loadState();
+            const loaded = await loadState();
             ensureAllExchangeRates();
             snapshotLegacyPaidWeeks();
             initThemeAndFont();
@@ -987,6 +1080,7 @@
             populateCurrencyDropdown();
             switchTab('dashboard');
             renderAll();
+            if (!loaded) showToast('Server data could not be loaded. Changes are disabled until synchronization is restored.', 'error');
         };
 
         
